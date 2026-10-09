@@ -1,22 +1,26 @@
 "use client";
 
-// import { createClient } from "@/lib/supabase/client";
-
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/client";
 
 export function FacebookOAuthButton() {
   const handleClick = async () => {
-    // const supabase = createClient();
-    // await supabase.auth.signInWithOAuth({
-    //   provider: "facebook",
-    //   options: {
-    //     redirectTo: `${window.location.origin}/auth/callback`,
-    //   },
-    // });
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider: "facebook",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
   };
 
   return (
-    <Button variant="outline" className="w-full" onClick={handleClick}>
+    <Button
+      type="button"
+      variant="outline"
+      className="w-full"
+      onClick={handleClick}
+    >
       <FacebookIcon />
       Continuar con Facebook
     </Button>

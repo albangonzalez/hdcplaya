@@ -1,22 +1,26 @@
 "use client";
 
-// import { createClient } from "@/lib/supabase/client";
-
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/client";
 
 export function GoogleOAuthButton() {
   const handleClick = async () => {
-    // const supabase = createClient();
-    // await supabase.auth.signInWithOAuth({
-    //   provider: "google",
-    //   options: {
-    //     redirectTo: `${window.location.origin}/auth/callback`,
-    //   },
-    // });
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
   };
 
   return (
-    <Button variant="outline" className="w-full" onClick={handleClick}>
+    <Button
+      type="button"
+      variant="outline"
+      className="w-full"
+      onClick={handleClick}
+    >
       <GoogleIcon />
       Continuar con Google
     </Button>
