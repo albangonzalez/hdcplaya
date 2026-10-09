@@ -39,12 +39,13 @@ The product is an app for **Hacienda del Carmen Playa** (the name shown on the l
 
 - `app/page.tsx` — untouched create-next-app landing page.
 - `app/login/page.tsx` — two-column login screen rendering `components/login-form.tsx`, which composes the OAuth buttons in `components/auth/`.
-- `app/dashboard/page.tsx` — shadcn `dashboard-01` block: `SidebarProvider` → `AppSidebar` + `SidebarInset` (`SiteHeader`, `SectionCards`, `ChartAreaInteractive`, `DataTable`). Rows come from the static `app/dashboard/data.json`; nav items and the user in `components/app-sidebar.tsx` are placeholder data.
+- `app/dashboard/page.tsx` — shadcn `dashboard-01` block: `SidebarProvider` → `AppSidebar` + `SidebarInset` (`SiteHeader`, `SectionCards`, `ChartAreaInteractive`, `DataTable`). Rows come from the static `app/dashboard/data.json`; the user shown in `components/app-sidebar.tsx` is placeholder data.
 
 Component layers:
 
 - `components/ui/` — shadcn-generated primitives. Style is `base-vega` (`components.json`), meaning they wrap **`@base-ui/react`**, not Radix. Base UI's API differs from Radix (e.g. composition via the `render` prop instead of `asChild`, `data-*` state attributes like `data-vertical`), so don't paste Radix-flavoured shadcn snippets in unchanged.
 - `components/*.tsx` — block-level compositions (sidebar, nav-*, data table, chart, login form).
+- The sidebar menu is data-driven: `config/menu.json` lists groups and items (`label`, `path`, `icon`, optional `roles` per group), and `lib/menu.ts` maps icon names to `lucide-react` components and filters groups by role. To add an item, edit the JSON; a new icon also needs an entry in the `menuIcons` map. Most menu paths have no page yet.
 - `components/auth/` — app-authored components; these use PascalCase filenames, unlike the kebab-case shadcn files.
 
 Auth is Supabase via `@supabase/ssr`, with three clients in `lib/supabase/`: `client.ts` (browser), `server.ts` (Server Components / route handlers, cookie-backed) and `proxy.ts` (session refresh). The root `proxy.ts` runs `updateSession` on every non-asset request and redirects unauthenticated users to `/login` for everything except `/login` and `/auth/*`. Sign-in happens client-side: `components/login-form.tsx` calls `signInWithPassword` and the buttons in `components/auth/` call `signInWithOAuth` (Google, Facebook), which returns through `app/auth/callback/route.ts` to exchange the code for a session. Both paths land on `/dashboard`; a failed OAuth exchange goes to `/login?error=oauth`. Sign-up, password reset and sign-out are not implemented.
