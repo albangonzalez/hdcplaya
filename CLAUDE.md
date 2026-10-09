@@ -19,6 +19,10 @@ pnpm dlx shadcn@latest add <name>     # add a shadcn/ui component into component
 
 There is no test runner configured.
 
+## Commits
+
+Always commit with short messages: a single concise subject line (e.g. `Add login page`), no body.
+
 ## Stack
 
 Next.js 16.4 (App Router) · React 19.3 · TypeScript strict · Tailwind CSS v4 · shadcn/ui on Base UI · pnpm.
@@ -43,7 +47,7 @@ Component layers:
 - `components/*.tsx` — block-level compositions (sidebar, nav-*, data table, chart, login form).
 - `components/auth/` — app-authored components; these use PascalCase filenames, unlike the kebab-case shadcn files.
 
-Auth is intended to be Supabase OAuth (Google, Facebook) with a `/auth/callback` redirect, but it is only stubbed: the `signInWithOAuth` calls in `components/auth/*OAuthButton.tsx` are commented out, and neither `@/lib/supabase/client` nor the Supabase packages exist yet.
+Auth is Supabase via `@supabase/ssr`, with three clients in `lib/supabase/`: `client.ts` (browser), `server.ts` (Server Components / route handlers, cookie-backed) and `proxy.ts` (session refresh). The root `proxy.ts` runs `updateSession` on every non-asset request and redirects unauthenticated users to `/login` for everything except `/login` and `/auth/*`. Sign-in happens client-side: `components/login-form.tsx` calls `signInWithPassword` and the buttons in `components/auth/` call `signInWithOAuth` (Google, Facebook), which returns through `app/auth/callback/route.ts` to exchange the code for a session. Both paths land on `/dashboard`; a failed OAuth exchange goes to `/login?error=oauth`. Sign-up, password reset and sign-out are not implemented.
 
 ### Conventions
 
