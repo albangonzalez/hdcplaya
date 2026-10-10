@@ -37,9 +37,8 @@ The Next.js version is newer than most training data — per `AGENTS.md`, read t
 
 The product is an app for **Hacienda del Carmen Playa** (the name shown on the login screen). It is at an early scaffold stage: routes are shadcn blocks that have been dropped in and are only partly customized, with no backend yet.
 
-- `app/page.tsx` — untouched create-next-app landing page.
 - `app/login/page.tsx` — two-column login screen rendering `components/login-form.tsx`, which composes the OAuth buttons in `components/auth/`.
-- `app/dashboard/page.tsx` — shadcn `dashboard-01` block: `SidebarProvider` → `AppSidebar` + `SidebarInset` (`SiteHeader`, `SectionCards`, `ChartAreaInteractive`, `DataTable`). Rows come from the static `app/dashboard/data.json`; the user shown in `components/app-sidebar.tsx` is placeholder data.
+- `app/page.tsx` (the root, `/`) — the dashboard, from the shadcn `dashboard-01` block: `SidebarProvider` → `AppSidebar` + `SidebarInset` (`SiteHeader`, `SectionCards`, `ChartAreaInteractive`). The cards and chart still show the block's placeholder content, and the user in `components/app-sidebar.tsx` is placeholder data. `components/data-table.tsx` (the block's table) is no longer rendered anywhere.
 
 Component layers:
 
@@ -48,7 +47,7 @@ Component layers:
 - The sidebar menu is data-driven: `config/menu.json` lists groups and items (`label`, `path`, `icon`, optional `roles` per group; `label` is a key in the `Menu` messages namespace, not display text), and `lib/menu.ts` maps icon names to `lucide-react` components and filters groups by role. To add an item, edit the JSON; a new icon also needs an entry in the `menuIcons` map. Most menu paths have no page yet.
 - `components/auth/` — app-authored components; these use PascalCase filenames, unlike the kebab-case shadcn files.
 
-Auth is Supabase via `@supabase/ssr`, with three clients in `lib/supabase/`: `client.ts` (browser), `server.ts` (Server Components / route handlers, cookie-backed) and `proxy.ts` (session refresh). The root `proxy.ts` runs `updateSession` on every non-asset request and redirects unauthenticated users to `/login` for everything except `/login` and `/auth/*`. Sign-in happens client-side: `components/login-form.tsx` calls `signInWithPassword` and the buttons in `components/auth/` call `signInWithOAuth` (Google, Facebook), which returns through `app/auth/callback/route.ts` to exchange the code for a session. Both paths land on `/dashboard`; a failed OAuth exchange goes to `/login?error=oauth`. Sign-up, password reset and sign-out are not implemented.
+Auth is Supabase via `@supabase/ssr`, with three clients in `lib/supabase/`: `client.ts` (browser), `server.ts` (Server Components / route handlers, cookie-backed) and `proxy.ts` (session refresh). The root `proxy.ts` runs `updateSession` on every non-asset request and redirects unauthenticated users to `/login` for everything except `/login` and `/auth/*`. `app/page.tsx` also checks the session itself (`getClaims()` via the server client) and redirects to `/login` when there is no user. Sign-in happens client-side: `components/login-form.tsx` calls `signInWithPassword` and the buttons in `components/auth/` call `signInWithOAuth` (Google, Facebook), which returns through `app/auth/callback/route.ts` to exchange the code for a session. Both paths land on `/`; a failed OAuth exchange goes to `/login?error=oauth`. Sign-out is the "Log out" item in `components/nav-user.tsx` (`signOut()` on the browser client, then `/login`). Sign-up and password reset are not implemented.
 
 ### Conventions
 

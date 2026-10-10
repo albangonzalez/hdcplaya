@@ -1,5 +1,9 @@
 "use client"
 
+import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { toast } from "sonner"
+
 import {
   Avatar,
   AvatarFallback,
@@ -20,6 +24,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { createClient } from "@/lib/supabase/client"
 import { EllipsisVerticalIcon, CircleUserRoundIcon, CreditCardIcon, BellIcon, LogOutIcon } from "lucide-react"
 
 export function NavUser({
@@ -32,6 +37,22 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const t = useTranslations("UserMenu")
+  const router = useRouter()
+
+  const handleLogOut = async () => {
+    const supabase = createClient()
+    const { error } = await supabase.auth.signOut()
+
+    if (error) {
+      toast.error(t("logOutFailed"))
+      return
+    }
+
+    router.push("/login")
+    router.refresh()
+  }
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -94,10 +115,10 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogOut}>
               <LogOutIcon
               />
-              Log out
+              {t("logOut")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

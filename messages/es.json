@@ -33,5 +33,9 @@
     "categories": "Categorías",
     "oversight": "Vigilancia",
     "history": "Historial"
+  },
+  "UserMenu": {
+    "logOut": "Cerrar sesión",
+    "logOutFailed": "No se pudo cerrar sesión. Inténtalo de nuevo."
   }
 }

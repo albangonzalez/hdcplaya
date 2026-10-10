@@ -3,7 +3,7 @@
     {
       "id": "main",
       "items": [
-        { "id": "dashboard", "label": "dashboard", "path": "/dashboard", "icon": "LayoutDashboard" },
+        { "id": "dashboard", "label": "dashboard", "path": "/", "icon": "LayoutDashboard" },
         { "id": "my-units", "label": "myUnits", "path": "/my-units", "icon": "House" },
         { "id": "unit-balances", "label": "unitBalances", "path": "/unit-balances", "icon": "Scale" },
         { "id": "transactions", "label": "transactions", "path": "/transactions", "icon": "ArrowLeftRight" },

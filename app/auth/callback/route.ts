@@ -6,9 +6,9 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get("code")
   // Only allow same-origin relative paths as the post-login destination.
-  let next = searchParams.get("next") ?? "/dashboard"
+  let next = searchParams.get("next") ?? "/"
   if (!next.startsWith("/") || next.startsWith("//")) {
-    next = "/dashboard"
+    next = "/"
   }
 
   if (code) {
