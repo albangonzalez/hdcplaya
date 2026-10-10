@@ -1,6 +1,7 @@
 "use client"
 
 import { Suspense, useEffect, useState } from "react"
+import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { cn } from "cn"
@@ -81,12 +82,12 @@ export function LoginForm({
           <Field>
             <div className="flex items-center">
               <FieldLabel htmlFor="password">{t("password")}</FieldLabel>
-              <a
-                href="#"
+              <Link
+                href="/auth/forgot-password"
                 className="ml-auto text-sm underline-offset-4 hover:underline"
               >
                 {t("forgotPassword")}
-              </a>
+              </Link>
             </div>
             <Input
               id="password"

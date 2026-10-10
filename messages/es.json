@@ -14,6 +14,20 @@
     "noAccount": "¿No tienes cuenta?",
     "signUp": "Regístrate"
   },
+  "ForgotPassword": {
+    "title": "¿Olvidaste tu contraseña?",
+    "description": "Escribe tu correo y te enviaremos un enlace para elegir una nueva.",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "tu@correo.com",
+    "submit": "Enviar enlace",
+    "submitting": "Enviando…",
+    "sentTitle": "Revisa tu correo",
+    "sentDescription": "Si existe una cuenta para {email}, recibirás un enlace para restablecer tu contraseña. El enlace caduca en una hora.",
+    "tryAnother": "Usar otro correo",
+    "backToLogin": "Volver a iniciar sesión",
+    "rateLimited": "Demasiados intentos. Espera unos minutos e inténtalo de nuevo.",
+    "failed": "No se pudo enviar el enlace. Inténtalo de nuevo."
+  },
   "SetPassword": {
     "title": "Establece tu contraseña",
     "description": "Elige la contraseña con la que iniciarás sesión.",

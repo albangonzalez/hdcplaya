@@ -14,6 +14,20 @@
     "noAccount": "Don't have an account?",
     "signUp": "Sign up"
   },
+  "ForgotPassword": {
+    "title": "Forgot your password?",
+    "description": "Enter your email and we will send you a link to choose a new one.",
+    "email": "Email",
+    "emailPlaceholder": "you@email.com",
+    "submit": "Send link",
+    "submitting": "Sending…",
+    "sentTitle": "Check your email",
+    "sentDescription": "If an account exists for {email}, you will receive a link to reset your password. The link expires in one hour.",
+    "tryAnother": "Use another email",
+    "backToLogin": "Back to log in",
+    "rateLimited": "Too many attempts. Wait a few minutes and try again.",
+    "failed": "Could not send the link. Please try again."
+  },
   "SetPassword": {
     "title": "Set your password",
     "description": "Choose the password you will log in with.",
