@@ -14,20 +14,25 @@ import {
   type LucideIcon,
 } from "lucide-react"
 
+import type { Messages } from "next-intl"
+
 import menuConfig from "@/config/menu.json"
 
 export type MenuRole = "owner" | "committee" | "admin"
 
+// A label in config/menu.json is a key of the "Menu" messages namespace.
+export type MenuLabel = keyof Messages["Menu"]
+
 export type MenuItem = {
   id: string
-  label: string
+  label: MenuLabel
   path: string
   icon: string
 }
 
 export type MenuGroup = {
   id: string
-  label?: string
+  label?: MenuLabel
   // Omitted means the group is visible to every role.
   roles?: MenuRole[]
   items: MenuItem[]

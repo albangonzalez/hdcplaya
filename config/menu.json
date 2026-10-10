@@ -3,31 +3,31 @@
     {
       "id": "main",
       "items": [
-        { "id": "dashboard", "label": "Dashboard", "path": "/dashboard", "icon": "LayoutDashboard" },
-        { "id": "my-units", "label": "My units", "path": "/my-units", "icon": "House" },
-        { "id": "unit-balances", "label": "Unit balances", "path": "/unit-balances", "icon": "Scale" },
-        { "id": "transactions", "label": "Transactions", "path": "/transactions", "icon": "ArrowLeftRight" },
-        { "id": "accounts", "label": "Accounts", "path": "/accounts", "icon": "Landmark" }
+        { "id": "dashboard", "label": "dashboard", "path": "/dashboard", "icon": "LayoutDashboard" },
+        { "id": "my-units", "label": "myUnits", "path": "/my-units", "icon": "House" },
+        { "id": "unit-balances", "label": "unitBalances", "path": "/unit-balances", "icon": "Scale" },
+        { "id": "transactions", "label": "transactions", "path": "/transactions", "icon": "ArrowLeftRight" },
+        { "id": "accounts", "label": "accounts", "path": "/accounts", "icon": "Landmark" }
       ]
     },
     {
       "id": "administration",
-      "label": "Administration",
+      "label": "administration",
       "roles": ["admin"],
       "items": [
-        { "id": "units", "label": "Units", "path": "/admin/units", "icon": "Building2" },
-        { "id": "users", "label": "Users", "path": "/admin/users", "icon": "Users" },
-        { "id": "fees", "label": "Fees", "path": "/admin/fees", "icon": "Receipt" },
-        { "id": "payments", "label": "Payments", "path": "/admin/payments", "icon": "HandCoins" },
-        { "id": "categories", "label": "Categories", "path": "/admin/categories", "icon": "Tags" }
+        { "id": "units", "label": "units", "path": "/admin/units", "icon": "Building2" },
+        { "id": "users", "label": "users", "path": "/admin/users", "icon": "Users" },
+        { "id": "fees", "label": "fees", "path": "/admin/fees", "icon": "Receipt" },
+        { "id": "payments", "label": "payments", "path": "/admin/payments", "icon": "HandCoins" },
+        { "id": "categories", "label": "categories", "path": "/admin/categories", "icon": "Tags" }
       ]
     },
     {
       "id": "oversight",
-      "label": "Oversight",
+      "label": "oversight",
       "roles": ["committee", "admin"],
       "items": [
-        { "id": "history", "label": "History", "path": "/history", "icon": "History" }
+        { "id": "history", "label": "history", "path": "/history", "icon": "History" }
       ]
     }
   ]

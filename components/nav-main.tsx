@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useTranslations } from "next-intl"
 
 import {
   SidebarGroup,
@@ -14,11 +15,12 @@ import {
 import { getMenuIcon, type MenuGroup } from "@/lib/menu"
 
 export function NavMain({ group }: { group: MenuGroup }) {
+  const t = useTranslations("Menu")
   const pathname = usePathname()
 
   return (
     <SidebarGroup>
-      {group.label && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
+      {group.label && <SidebarGroupLabel>{t(group.label)}</SidebarGroupLabel>}
       <SidebarGroupContent>
         <SidebarMenu>
           {group.items.map((item) => {
@@ -26,7 +28,7 @@ export function NavMain({ group }: { group: MenuGroup }) {
             return (
               <SidebarMenuItem key={item.id}>
                 <SidebarMenuButton
-                  tooltip={item.label}
+                  tooltip={t(item.label)}
                   isActive={
                     pathname === item.path ||
                     pathname.startsWith(`${item.path}/`)
@@ -34,7 +36,7 @@ export function NavMain({ group }: { group: MenuGroup }) {
                   render={<Link href={item.path} />}
                 >
                   <Icon />
-                  <span>{item.label}</span>
+                  <span>{t(item.label)}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             )

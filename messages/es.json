@@ -18,5 +18,20 @@
     "label": "Idioma",
     "es": "Español",
     "en": "English"
+  },
+  "Menu": {
+    "dashboard": "Dashboard",
+    "myUnits": "Mis unidades",
+    "unitBalances": "Saldos por unidad",
+    "transactions": "Transacciones",
+    "accounts": "Cuentas",
+    "administration": "Administración",
+    "units": "Unidades",
+    "users": "Usuarios",
+    "fees": "Cuotas",
+    "payments": "Pagos",
+    "categories": "Categorías",
+    "oversight": "Vigilancia",
+    "history": "Historial"
   }
 }

@@ -18,5 +18,20 @@
     "label": "Language",
     "es": "Español",
     "en": "English"
+  },
+  "Menu": {
+    "dashboard": "Dashboard",
+    "myUnits": "My units",
+    "unitBalances": "Unit balances",
+    "transactions": "Transactions",
+    "accounts": "Accounts",
+    "administration": "Administration",
+    "units": "Units",
+    "users": "Users",
+    "fees": "Fees",
+    "payments": "Payments",
+    "categories": "Categories",
+    "oversight": "Oversight",
+    "history": "History"
   }
 }
