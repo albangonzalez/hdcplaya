@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { cn } from "cn"
 import { toast } from "sonner"
 
@@ -22,6 +23,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const t = useTranslations("Login")
   const router = useRouter()
   const [pending, setPending] = useState(false)
 
@@ -38,7 +40,11 @@ export function LoginForm({
     })
 
     if (error) {
-      toast.error(error.message)
+      toast.error(
+        error.code === "invalid_credentials"
+          ? t("invalidCredentials")
+          : t("signInFailed")
+      )
       setPending(false)
       return
     }
@@ -59,27 +65,27 @@ export function LoginForm({
             </Suspense>
           </Field>
           <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-            or
+            {t("or")}
           </FieldSeparator>
           <Field>
-            <FieldLabel htmlFor="email">Email</FieldLabel>
+            <FieldLabel htmlFor="email">{t("email")}</FieldLabel>
             <Input
               id="email"
               name="email"
               type="email"
               autoComplete="email"
-              placeholder="your@email.com"
+              placeholder={t("emailPlaceholder")}
               required
             />
           </Field>
           <Field>
             <div className="flex items-center">
-              <FieldLabel htmlFor="password">Password</FieldLabel>
+              <FieldLabel htmlFor="password">{t("password")}</FieldLabel>
               <a
                 href="#"
                 className="ml-auto text-sm underline-offset-4 hover:underline"
               >
-                Forgot your password?
+                {t("forgotPassword")}
               </a>
             </div>
             <Input
@@ -92,10 +98,10 @@ export function LoginForm({
           </Field>
           <Field>
             <Button type="submit" disabled={pending}>
-              {pending ? "Logging in…" : "Login"}
+              {pending ? t("submitting") : t("submit")}
             </Button>
             <FieldDescription className="text-center">
-              Don&apos;t have an account? <a href="#">Sign up</a>
+              {t("noAccount")} <a href="#">{t("signUp")}</a>
             </FieldDescription>
           </Field>
         </FieldGroup>
@@ -106,14 +112,15 @@ export function LoginForm({
 
 // Toasts when /auth/callback sends the user back after a failed OAuth sign-in.
 function OAuthError() {
+  const t = useTranslations("Login")
   const searchParams = useSearchParams()
   const hasError = searchParams.has("error")
 
   useEffect(() => {
     if (hasError) {
-      toast.error("Sign-in failed. Please try again.", { id: "oauth-error" })
+      toast.error(t("signInFailed"), { id: "oauth-error" })
     }
-  }, [hasError])
+  }, [hasError, t])
 
   return null
 }

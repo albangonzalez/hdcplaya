@@ -1,9 +1,12 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 
 export function FacebookOAuthButton() {
+  const t = useTranslations("Login");
   const handleClick = async () => {
     const supabase = createClient();
     await supabase.auth.signInWithOAuth({
@@ -22,7 +25,7 @@ export function FacebookOAuthButton() {
       onClick={handleClick}
     >
       <FacebookIcon />
-      Continuar con Facebook
+      {t("continueWithFacebook")}
     </Button>
   );
 }

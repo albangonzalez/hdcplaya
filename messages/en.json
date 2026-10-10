@@ -1,0 +1,22 @@
+{
+  "Login": {
+    "continueWithGoogle": "Continue with Google",
+    "continueWithFacebook": "Continue with Facebook",
+    "or": "or",
+    "email": "Email",
+    "emailPlaceholder": "you@email.com",
+    "password": "Password",
+    "forgotPassword": "Forgot your password?",
+    "submit": "Log in",
+    "submitting": "Logging in…",
+    "invalidCredentials": "Incorrect email or password.",
+    "signInFailed": "Sign-in failed. Please try again.",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up"
+  },
+  "LocaleSwitcher": {
+    "label": "Language",
+    "es": "Español",
+    "en": "English"
+  }
+}

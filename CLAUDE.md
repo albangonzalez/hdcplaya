@@ -56,7 +56,8 @@ Auth is Supabase via `@supabase/ssr`, with three clients in `lib/supabase/`: `cl
 - Path alias `@/*` maps to the repo root (there is no `src/`).
 - Icons are `lucide-react`, using the `*Icon`-suffixed exports.
 - Theme tokens are OKLCH CSS variables in `app/globals.css` (`:root` and `.dark`), exposed to Tailwind via `@theme inline`. Dark mode is class-based (`@custom-variant dark`).
-- User-facing copy is currently mixed English and Spanish (the OAuth buttons are Spanish).
+- i18n is `next-intl` without locale routing: Spanish (default) and English, chosen by a `locale` cookie that `i18n/request.ts` reads; `i18n/actions.ts` (`setLocale`) writes it and `components/locale-switcher.tsx` calls that. Messages live in `messages/es.json` and `messages/en.json`, grouped by namespace (`Login`, …); `es.json` is the source of truth for key types (`global.d.ts`). Add every new user-facing string to both files and read it with `useTranslations` / `getTranslations` — no hard-coded copy. Only the login page is translated so far; the dashboard and sidebar are still hard-coded English.
+- Because the locale comes from a cookie, `app/layout.tsx` wraps the app in `<Suspense>` around `NextIntlClientProvider` (required by `cacheComponents`), so pages are partially prerendered: anything translated renders per request. `<html lang>` is rendered as the default and corrected on the client by `components/html-lang.tsx`.
 - `app/layout.tsx` mounts `ThemeProvider` (next-themes, class-based, system default; pressing `d` outside inputs toggles dark mode) and the sonner `Toaster`, so `toast()` works from any client component.
 
 ### Known gaps in the current scaffold
@@ -64,4 +65,4 @@ Auth is Supabase via `@supabase/ssr`, with three clients in `lib/supabase/`: `cl
 These are existing loose ends, worth knowing before debugging around them:
 
 - `app-sidebar.tsx` references `/avatars/shadcn.jpg`, which is not in `public/`.
-- `app/layout.tsx` still has the default "Create Next App" metadata and `lang="en"`.
+- `app/layout.tsx` still has the default "Create Next App" metadata.
