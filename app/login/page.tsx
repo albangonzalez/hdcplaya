@@ -1,11 +1,19 @@
-"use client"
+import { redirect } from "next/navigation"
 
 import { LocaleSwitcher } from "@/components/locale-switcher"
 import { LoginForm } from "@/components/login-form"
+import { createClient } from "@/lib/supabase/server"
 import { GalleryVerticalEndIcon } from "lucide-react"
 import Image from "next/image"
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const supabase = await createClient()
+  const { data } = await supabase.auth.getClaims()
+
+  if (data?.claims) {
+    redirect("/")
+  }
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
