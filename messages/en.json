@@ -14,6 +14,21 @@
     "noAccount": "Don't have an account?",
     "signUp": "Sign up"
   },
+  "SetPassword": {
+    "title": "Set your password",
+    "description": "Choose the password you will log in with.",
+    "password": "New password",
+    "confirmPassword": "Confirm password",
+    "hint": "At least {min} characters.",
+    "submit": "Save password",
+    "submitting": "Saving…",
+    "saved": "Password saved.",
+    "mismatch": "The passwords do not match.",
+    "weakPassword": "The password is too weak.",
+    "samePassword": "The new password must be different from the old one.",
+    "failed": "Could not save the password. Please try again.",
+    "verifyingLink": "Verifying the link…"
+  },
   "LocaleSwitcher": {
     "label": "Language",
     "es": "Español",
@@ -37,5 +52,61 @@
   "UserMenu": {
     "logOut": "Log out",
     "logOutFailed": "Could not log out. Please try again."
+  },
+  "Users": {
+    "add": "Add user",
+    "columns": {
+      "name": "Name",
+      "role": "Role",
+      "email": "Email",
+      "actions": "Actions"
+    },
+    "roles": {
+      "admin": "Admin",
+      "owner": "Owner",
+      "committee": "Committee"
+    },
+    "actions": {
+      "openMenu": "Open menu",
+      "show": "Show",
+      "edit": "Edit",
+      "deactivate": "Deactivate",
+      "delete": "Delete"
+    },
+    "empty": "No users.",
+    "stats": {
+      "activeOwners": "Active owners",
+      "deactivatedAccounts": "Deactivated accounts",
+      "committeeMembers": "Committee members"
+    },
+    "form": {
+      "createTitle": "Add user",
+      "createDescription": "The person will receive an invitation by email.",
+      "editTitle": "Edit user",
+      "editDescription": "Change the details of {name}.",
+      "firstName": "First name",
+      "firstLastName": "First last name",
+      "secondLastName": "Second last name",
+      "optional": "optional",
+      "email": "Email",
+      "role": "Role",
+      "language": "Language",
+      "isCommittee": "Oversight Committee member",
+      "isCommitteeDescription": "Only an owner can be on the committee.",
+      "cancel": "Cancel",
+      "create": "Add",
+      "save": "Save",
+      "created": "Invitation sent to {email}.",
+      "errors": {
+        "invalid": "Check the form details.",
+        "emailTaken": "A user with that email already exists.",
+        "inviteFailed": "Could not send the invitation. Please try again.",
+        "saveFailed": "Could not save the user. Please try again."
+      }
+    },
+    "languages": {
+      "es": "Spanish",
+      "en": "English"
+    }
   }
 }
