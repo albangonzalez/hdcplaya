@@ -57,6 +57,16 @@ export function getMenuIcon(name: string): LucideIcon {
   return menuIcons[name] ?? CircleIcon
 }
 
+export function isMenuItemActive(item: MenuItem, pathname: string): boolean {
+  return pathname === item.path || pathname.startsWith(`${item.path}/`)
+}
+
+export function findMenuItem(pathname: string): MenuItem | undefined {
+  return (menuConfig.groups as MenuGroup[])
+    .flatMap((group) => group.items)
+    .find((item) => isMenuItemActive(item, pathname))
+}
+
 export function getMenu(role: MenuRole): MenuGroup[] {
   return (menuConfig.groups as MenuGroup[]).filter(
     (group) => !group.roles || group.roles.includes(role)

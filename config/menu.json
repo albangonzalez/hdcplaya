@@ -16,7 +16,7 @@
       "roles": ["admin"],
       "items": [
         { "id": "units", "label": "units", "path": "/admin/units", "icon": "Building2" },
-        { "id": "users", "label": "users", "path": "/admin/users", "icon": "Users" },
+        { "id": "users", "label": "users", "path": "/users", "icon": "Users" },
         { "id": "fees", "label": "fees", "path": "/admin/fees", "icon": "Receipt" },
         { "id": "payments", "label": "payments", "path": "/admin/payments", "icon": "HandCoins" },
         { "id": "categories", "label": "categories", "path": "/admin/categories", "icon": "Tags" }

@@ -12,7 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { getMenuIcon, type MenuGroup } from "@/lib/menu"
+import { getMenuIcon, isMenuItemActive, type MenuGroup } from "@/lib/menu"
 
 export function NavMain({ group }: { group: MenuGroup }) {
   const t = useTranslations("Menu")
@@ -29,10 +29,7 @@ export function NavMain({ group }: { group: MenuGroup }) {
               <SidebarMenuItem key={item.id}>
                 <SidebarMenuButton
                   tooltip={t(item.label)}
-                  isActive={
-                    pathname === item.path ||
-                    pathname.startsWith(`${item.path}/`)
-                  }
+                  isActive={isMenuItemActive(item, pathname)}
                   render={<Link href={item.path} />}
                 >
                   <Icon />
