@@ -35,7 +35,7 @@ The Next.js version is newer than most training data — per `AGENTS.md`, read t
 
 ## Architecture
 
-The product is an app for **Hacienda del Carmen Playa** (the name shown on the login screen). It is at an early scaffold stage: routes are shadcn blocks that have been dropped in and are only partly customized, with no backend yet.
+The product is an app for **Hacienda del Carmen Playa** (the name shown on the login screen). It is at an early scaffold stage: routes are shadcn blocks that have been dropped in and are only partly customized. `SPECS.md` is the product spec and data model.
 
 - `app/login/page.tsx` — two-column login screen rendering `components/login-form.tsx`, which composes the OAuth buttons in `components/auth/`.
 - `app/page.tsx` (the root, `/`) — the dashboard, from the shadcn `dashboard-01` block: `SidebarProvider` → `AppSidebar` + `SidebarInset` (`SiteHeader`, `SectionCards`, `ChartAreaInteractive`). The cards and chart still show the block's placeholder content, and the user in `components/app-sidebar.tsx` is placeholder data. `components/data-table.tsx` (the block's table) is no longer rendered anywhere.
@@ -48,6 +48,8 @@ Component layers:
 - `components/auth/` — app-authored components; these use PascalCase filenames, unlike the kebab-case shadcn files.
 
 Auth is Supabase via `@supabase/ssr`, with three clients in `lib/supabase/`: `client.ts` (browser), `server.ts` (Server Components / route handlers, cookie-backed) and `proxy.ts` (session refresh). The root `proxy.ts` runs `updateSession` on every non-asset request and redirects unauthenticated users to `/login` for everything except `/login` and `/auth/*`. Pages also check the session themselves with `getClaims()` via the server client: `app/page.tsx` redirects to `/login` when there is no user, and `app/login/page.tsx` redirects to `/` when there is one. Sign-in happens client-side: `components/login-form.tsx` calls `signInWithPassword` and the buttons in `components/auth/` call `signInWithOAuth` (Google, Facebook), which returns through `app/auth/callback/route.ts` to exchange the code for a session. Both paths land on `/`; a failed OAuth exchange goes to `/login?error=oauth`. Sign-out is the "Log out" item in `components/nav-user.tsx` (`signOut()` on the browser client, then `/login`). Sign-up and password reset are not implemented.
+
+Application data is MongoDB through the official `mongodb` driver (no ODM), validated with Zod. `lib/mongodb.ts` holds the shared client (`getDb`, `getCollection`; database name comes from `MONGODB_URI`). `models/` has one file per collection from `SPECS.md` section 10, each exporting a Zod schema, the inferred type and a typed collection accessor (`userSchema`, `User`, `usersCollection()`); import from `@/models`. The driver does not validate, so parse with the schema before every write. `ensureIndexes()` in `models/indexes.ts` creates the unique indexes the model relies on and is not called anywhere yet. Amounts are integer centavos; fields that can be absent are stored as `null`, not omitted. Nothing in the app reads or writes the database yet.
 
 ### Conventions
 
