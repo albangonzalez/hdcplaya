@@ -4,7 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 
 import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
+import { NavUser, type NavUserProps } from "@/components/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -17,16 +17,14 @@ import {
 import { getMenu, type MenuRole } from "@/lib/menu"
 import { GalleryVerticalEndIcon } from "lucide-react"
 
-const user = {
-  name: "shadcn",
-  email: "m@example.com",
-  avatar: "/avatars/shadcn.jpg",
-}
-
 export function AppSidebar({
   role = "admin",
+  user,
   ...props
-}: React.ComponentProps<typeof Sidebar> & { role?: MenuRole }) {
+}: React.ComponentProps<typeof Sidebar> & {
+  role?: MenuRole
+  user: NavUserProps["user"]
+}) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>

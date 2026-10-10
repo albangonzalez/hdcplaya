@@ -5,14 +5,19 @@ import { ChartAreaInteractive } from "@/components/chart-area-interactive"
 import { SectionCards } from "@/components/section-cards"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import { createClient } from "@/lib/supabase/server"
+import { getCurrentUser, getFullName } from "@/lib/current-user"
 
 export default async function Page() {
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getClaims()
+  const currentUser = await getCurrentUser()
 
-  if (!data?.claims) {
+  if (!currentUser) {
     redirect("/login")
+  }
+
+  const email = currentUser.profile?.email ?? currentUser.email ?? ""
+  const sidebarUser = {
+    name: currentUser.profile ? getFullName(currentUser.profile) : email,
+    email,
   }
 
   return (
@@ -24,7 +29,7 @@ export default async function Page() {
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
+      <AppSidebar variant="inset" user={sidebarUser} />
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">
