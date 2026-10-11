@@ -516,11 +516,11 @@
     "special": "Special assessments to pay",
     "credit": "Credit",
     "overdue": "{amount} overdue",
-    "nothingOverdue": "Nothing overdue"
+    "nothingOverdue": "Nothing overdue",
+    "unit": "Unit {identifier}"
   },
   "MyUnits": {
-    "empty": "You have no units assigned.",
-    "unit": "Unit {identifier}"
+    "empty": "You have no units assigned."
   },
   "UnitBalances": {
     "empty": "No units.",
@@ -611,6 +611,23 @@
       "invalid": "Check the form details.",
       "notFound": "It no longer exists or you do not have access.",
       "saveFailed": "Could not save. Please try again."
+    }
+  },
+  "Dashboard": {
+    "myUnits": "My units",
+    "income": "Income this month",
+    "expenses": "Expenses this month",
+    "result": "Result for the month",
+    "balanceOf": "{account} balance",
+    "unitsInDebt": "Units with overdue amounts",
+    "noDebt": "No unit has overdue amounts.",
+    "noOwner": "No owner",
+    "columns": {
+      "unit": "Unit",
+      "owners": "Owners",
+      "regular": "Monthly fees",
+      "special": "Special",
+      "total": "Total overdue"
     }
   }
 }

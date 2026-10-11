@@ -516,11 +516,11 @@
     "special": "Cuotas extraordinarias por pagar",
     "credit": "Saldo a favor",
     "overdue": "{amount} vencido",
-    "nothingOverdue": "Nada vencido"
+    "nothingOverdue": "Nada vencido",
+    "unit": "Unidad {identifier}"
   },
   "MyUnits": {
-    "empty": "No tienes unidades asignadas.",
-    "unit": "Unidad {identifier}"
+    "empty": "No tienes unidades asignadas."
   },
   "UnitBalances": {
     "empty": "No hay unidades.",
@@ -611,6 +611,23 @@
       "invalid": "Revisa los datos del formulario.",
       "notFound": "Ya no existe o no tienes acceso.",
       "saveFailed": "No se pudo guardar. Inténtalo de nuevo."
+    }
+  },
+  "Dashboard": {
+    "myUnits": "Mis unidades",
+    "income": "Ingresos del mes",
+    "expenses": "Gastos del mes",
+    "result": "Resultado del mes",
+    "balanceOf": "Saldo de {account}",
+    "unitsInDebt": "Unidades con adeudo vencido",
+    "noDebt": "Ninguna unidad tiene adeudos vencidos.",
+    "noOwner": "Sin propietario",
+    "columns": {
+      "unit": "Unidad",
+      "owners": "Propietarios",
+      "regular": "Cuotas mensuales",
+      "special": "Extraordinarias",
+      "total": "Total vencido"
     }
   }
 }
