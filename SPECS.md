@@ -9,7 +9,7 @@ A web app for the condominium Hacienda del Carmen (Playa del Carmen, Mexico) tha
 | Term | Meaning |
 |---|---|
 | Unit | A private property in the condo (apartment, house, commercial space). |
-| Ownership share (indiviso) | The unit's percentage share of the common property. All ownership shares add up to 100%. |
+| Ownership share (indiviso) | The unit's share of the common property, as a number of shares out of 10,000. All ownership shares add up to 10,000 (100%). |
 | Fee (cuota de mantenimiento) | The recurring amount a unit owes the condo. |
 | Special assessment (cuota extraordinaria) | A one-off amount approved by the Asamblea, split between units. |
 | Charge | What one unit owes: its share of a month's fee or of a special assessment. |
@@ -205,7 +205,7 @@ Eleven MongoDB collections cover the minimal version. Collection and field names
 // units
 {
   _id, identifier,                // unique, e.g. "A-12"
-  ownershipShare: number,         // integer, 1/10,000 of a percent
+  ownershipShare: number,         // integer, shares out of 10,000
   owners:  [{ userId, from: Date, to: Date | null }],
   tenants: [{
     _id, firstName, firstLastName, secondLastName,

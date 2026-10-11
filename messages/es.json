@@ -122,5 +122,45 @@
       "es": "Español",
       "en": "Inglés"
     }
+  },
+  "Units": {
+    "columns": {
+      "unit": "Unidad",
+      "ownershipShare": "Indiviso",
+      "owners": "Propietarios",
+      "actions": "Acciones"
+    },
+    "noOwner": "Sin propietario",
+    "actions": {
+      "openMenu": "Abrir menú",
+      "edit": "Editar"
+    },
+    "empty": "No hay unidades.",
+    "stats": {
+      "units": "Unidades",
+      "withoutOwner": "Sin propietario",
+      "ownershipShare": "Indiviso asignado",
+      "shareWarning": "Los indivisos no suman {total, number}."
+    },
+    "form": {
+      "editTitle": "Editar unidad",
+      "editDescription": "Cambia los datos de la unidad {identifier}.",
+      "identifier": "Identificador",
+      "ownershipShare": "Indiviso",
+      "ownershipShareDescription": "Partes de un total de {total, number}.",
+      "owners": "Propietarios",
+      "ownersPlaceholder": "Sin propietario",
+      "ownersDescription": "Un cambio de propietario se registra con la fecha de hoy.",
+      "noOwnersAvailable": "Aún no hay usuarios con rol de propietario.",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saved": "Unidad {identifier} guardada.",
+      "errors": {
+        "invalid": "Revisa los datos del formulario.",
+        "notFound": "La unidad ya no existe.",
+        "identifierTaken": "Ya existe una unidad con ese identificador.",
+        "saveFailed": "No se pudo guardar la unidad. Inténtalo de nuevo."
+      }
+    }
   }
 }

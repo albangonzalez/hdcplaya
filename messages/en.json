@@ -122,5 +122,45 @@
       "es": "Spanish",
       "en": "English"
     }
+  },
+  "Units": {
+    "columns": {
+      "unit": "Unit",
+      "ownershipShare": "Ownership share",
+      "owners": "Owners",
+      "actions": "Actions"
+    },
+    "noOwner": "No owner",
+    "actions": {
+      "openMenu": "Open menu",
+      "edit": "Edit"
+    },
+    "empty": "No units.",
+    "stats": {
+      "units": "Units",
+      "withoutOwner": "Without an owner",
+      "ownershipShare": "Shares assigned",
+      "shareWarning": "Ownership shares do not add up to {total, number}."
+    },
+    "form": {
+      "editTitle": "Edit unit",
+      "editDescription": "Change the details of unit {identifier}.",
+      "identifier": "Identifier",
+      "ownershipShare": "Ownership share",
+      "ownershipShareDescription": "Shares out of a total of {total, number}.",
+      "owners": "Owners",
+      "ownersPlaceholder": "No owner",
+      "ownersDescription": "A change of owner is recorded with today's date.",
+      "noOwnersAvailable": "There are no users with the owner role yet.",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saved": "Unit {identifier} saved.",
+      "errors": {
+        "invalid": "Check the form details.",
+        "notFound": "The unit no longer exists.",
+        "identifierTaken": "A unit with that identifier already exists.",
+        "saveFailed": "Could not save the unit. Please try again."
+      }
+    }
   }
 }

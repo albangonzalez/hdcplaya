@@ -1,10 +1,10 @@
 import { z } from "zod"
 
 import { getCollection } from "@/lib/mongodb"
-import { nameSchema, objectIdSchema } from "./shared"
+import { nameSchema, objectIdSchema, objectIdStringSchema } from "./shared"
 
-// 100% expressed in 1/10,000 of a percent.
-export const OWNERSHIP_SHARE_TOTAL = 1_000_000
+// The condo is divided into this many shares; a unit holds some of them.
+export const OWNERSHIP_SHARE_TOTAL = 10_000
 
 export const unitOwnerSchema = z.object({
   userId: objectIdSchema,
@@ -44,6 +44,16 @@ export const unitSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
 })
+
+// What the admin enters. `ownerIds` are the users who own the unit now; the
+// server turns a change into `owners` history entries.
+export const unitInputSchema = z.object({
+  identifier: z.string().trim().min(1),
+  ownershipShare: z.int().min(0).max(OWNERSHIP_SHARE_TOTAL),
+  ownerIds: z.array(objectIdStringSchema),
+})
+
+export type UnitInput = z.infer<typeof unitInputSchema>
 
 export type UnitOwner = z.infer<typeof unitOwnerSchema>
 export type Tenant = z.infer<typeof tenantSchema>

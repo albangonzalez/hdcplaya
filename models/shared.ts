@@ -2,6 +2,8 @@ import { ObjectId } from "mongodb"
 import { z } from "zod"
 
 export const objectIdSchema = z.instanceof(ObjectId)
+// An id as it travels to and from the browser.
+export const objectIdStringSchema = z.string().regex(/^[0-9a-f]{24}$/)
 
 // All amounts are integers in centavos (MXN).
 export const amountSchema = z.int().nonnegative()
