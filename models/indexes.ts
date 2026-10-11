@@ -1,6 +1,7 @@
 import { accountsCollection } from "./account"
 import { auditLogsCollection } from "./audit-log"
 import { chargesCollection } from "./charge"
+import { feeSettingsCollection } from "./fee-setting"
 import { filesCollection } from "./file"
 import { paymentsCollection } from "./payment"
 import { transactionsCollection } from "./transaction"
@@ -15,6 +16,8 @@ export async function ensureIndexes() {
 
     unitsCollection().createIndex({ identifier: 1 }, { unique: true }),
     unitsCollection().createIndex({ "owners.userId": 1 }),
+
+    feeSettingsCollection().createIndex({ effectiveFrom: 1 }, { unique: true }),
 
     // A month's fee cannot be generated twice for the same unit.
     chargesCollection().createIndex(

@@ -11,6 +11,9 @@ export const feeSettingSchema = z.object({
   dueDay: z.int().min(1).max(28),
 })
 
+// What the admin enters.
+export const feeSettingInputSchema = feeSettingSchema.omit({ _id: true })
+
 export type FeeSetting = z.infer<typeof feeSettingSchema>
 
 export const feeSettingsCollection = () =>

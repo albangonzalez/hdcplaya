@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "db:indexes": "tsx --env-file=.env scripts/ensure-indexes.ts",
     "seed:units": "tsx --env-file=.env scripts/seed-units.ts"
   },
   "dependencies": {

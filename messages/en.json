@@ -162,5 +162,104 @@
         "saveFailed": "Could not save the unit. Please try again."
       }
     }
+  },
+  "Fees": {
+    "cancel": "Cancel",
+    "monthPlaceholder": "YYYY-MM",
+    "errors": {
+      "noUnits": "There are no units to charge.",
+      "sharesMismatch": "The units' ownership shares do not add up to 10,000. Fix them in Units before continuing."
+    },
+    "stats": {
+      "monthlyBudget": "Monthly budget",
+      "notSet": "Not set",
+      "dueDay": "Due on day {day} of each month",
+      "lastPeriod": "Last month generated",
+      "none": "None",
+      "charged": "{amount} charged",
+      "pendingAssessments": "Special assessments pending",
+      "outstanding": "{amount} outstanding"
+    },
+    "settings": {
+      "title": "Maintenance fee",
+      "change": "Change",
+      "empty": "The monthly budget has not been set yet.",
+      "inForce": "In force",
+      "columns": {
+        "effectiveFrom": "From",
+        "monthlyBudget": "Monthly budget",
+        "dueDay": "Due day"
+      },
+      "form": {
+        "title": "Change the maintenance fee",
+        "description": "The monthly budget is split between the units by ownership share.",
+        "monthlyBudget": "Monthly budget (MXN)",
+        "dueDay": "Due day",
+        "effectiveFrom": "From",
+        "effectiveFromDescription": "Months already generated keep their amounts.",
+        "save": "Save",
+        "saved": "Maintenance fee saved.",
+        "errors": {
+          "invalid": "Check the form details.",
+          "feesGenerated": "Fees were already generated for that month or a later one. Choose a more recent month.",
+          "saveFailed": "Could not save. Please try again."
+        }
+      }
+    },
+    "monthly": {
+      "title": "Monthly fees",
+      "generate": "Generate fees",
+      "empty": "No fees have been generated yet.",
+      "columns": {
+        "period": "Month",
+        "dueDate": "Due date",
+        "units": "Units",
+        "total": "Total"
+      },
+      "form": {
+        "title": "Generate fees",
+        "description": "Creates the month's charge for every unit.",
+        "period": "Month",
+        "summary": "Budget of {budget}, due on {dueDate}.",
+        "alreadyGenerated": "This month was already generated: only units that do not have their charge yet will be added.",
+        "submit": "Generate",
+        "generated": "{count, plural, one {# charge generated.} other {# charges generated.}}",
+        "nothingToGenerate": "Every unit already had its charge for that month.",
+        "errors": {
+          "invalid": "Choose a valid month.",
+          "noSettings": "There is no monthly budget set for that month.",
+          "saveFailed": "Could not generate the fees. Please try again."
+        }
+      }
+    },
+    "special": {
+      "title": "Special assessments",
+      "add": "Add",
+      "empty": "No special assessments.",
+      "columns": {
+        "description": "Description",
+        "dueDate": "Due date",
+        "createdAt": "Created",
+        "total": "Total"
+      },
+      "form": {
+        "title": "Add special assessment",
+        "description": "The total is split between the units by ownership share.",
+        "descriptionLabel": "Description",
+        "total": "Total (MXN)",
+        "dueDate": "Due date",
+        "submit": "Add",
+        "created": "Special assessment \"{description}\" created.",
+        "errors": {
+          "invalid": "Check the form details.",
+          "saveFailed": "Could not save the special assessment. Please try again."
+        }
+      }
+    },
+    "preview": {
+      "unit": "Unit",
+      "amount": "Amount",
+      "total": "{count, plural, one {# unit} other {# units}}"
+    }
   }
 }

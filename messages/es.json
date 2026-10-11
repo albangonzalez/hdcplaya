@@ -162,5 +162,104 @@
         "saveFailed": "No se pudo guardar la unidad. Inténtalo de nuevo."
       }
     }
+  },
+  "Fees": {
+    "cancel": "Cancelar",
+    "monthPlaceholder": "AAAA-MM",
+    "errors": {
+      "noUnits": "No hay unidades a las que cobrar.",
+      "sharesMismatch": "Los indivisos de las unidades no suman 10,000. Corrígelos en Unidades antes de continuar."
+    },
+    "stats": {
+      "monthlyBudget": "Presupuesto mensual",
+      "notSet": "Sin definir",
+      "dueDay": "Vence el día {day} de cada mes",
+      "lastPeriod": "Último mes generado",
+      "none": "Ninguno",
+      "charged": "{amount} cobrados",
+      "pendingAssessments": "Cuotas extraordinarias pendientes",
+      "outstanding": "{amount} por cobrar"
+    },
+    "settings": {
+      "title": "Cuota de mantenimiento",
+      "change": "Cambiar",
+      "empty": "Aún no se ha definido el presupuesto mensual.",
+      "inForce": "Vigente",
+      "columns": {
+        "effectiveFrom": "A partir de",
+        "monthlyBudget": "Presupuesto mensual",
+        "dueDay": "Día de vencimiento"
+      },
+      "form": {
+        "title": "Cambiar la cuota de mantenimiento",
+        "description": "El presupuesto mensual se reparte entre las unidades según su indiviso.",
+        "monthlyBudget": "Presupuesto mensual (MXN)",
+        "dueDay": "Día de vencimiento",
+        "effectiveFrom": "A partir de",
+        "effectiveFromDescription": "Los meses ya generados conservan sus importes.",
+        "save": "Guardar",
+        "saved": "Cuota de mantenimiento guardada.",
+        "errors": {
+          "invalid": "Revisa los datos del formulario.",
+          "feesGenerated": "Ya se generaron cuotas para ese mes o uno posterior. Elige un mes más reciente.",
+          "saveFailed": "No se pudo guardar. Inténtalo de nuevo."
+        }
+      }
+    },
+    "monthly": {
+      "title": "Cuotas mensuales",
+      "generate": "Generar cuotas",
+      "empty": "Aún no se han generado cuotas.",
+      "columns": {
+        "period": "Mes",
+        "dueDate": "Vencimiento",
+        "units": "Unidades",
+        "total": "Total"
+      },
+      "form": {
+        "title": "Generar cuotas",
+        "description": "Crea el cargo del mes para cada unidad.",
+        "period": "Mes",
+        "summary": "Presupuesto de {budget}, con vencimiento el {dueDate}.",
+        "alreadyGenerated": "Este mes ya se generó: solo se añadirán las unidades que aún no tengan su cargo.",
+        "submit": "Generar",
+        "generated": "{count, plural, one {Se generó # cargo.} other {Se generaron # cargos.}}",
+        "nothingToGenerate": "Todas las unidades ya tenían su cargo de ese mes.",
+        "errors": {
+          "invalid": "Elige un mes válido.",
+          "noSettings": "No hay presupuesto mensual definido para ese mes.",
+          "saveFailed": "No se pudieron generar las cuotas. Inténtalo de nuevo."
+        }
+      }
+    },
+    "special": {
+      "title": "Cuotas extraordinarias",
+      "add": "Agregar",
+      "empty": "No hay cuotas extraordinarias.",
+      "columns": {
+        "description": "Descripción",
+        "dueDate": "Vencimiento",
+        "createdAt": "Creada",
+        "total": "Total"
+      },
+      "form": {
+        "title": "Agregar cuota extraordinaria",
+        "description": "El total se reparte entre las unidades según su indiviso.",
+        "descriptionLabel": "Descripción",
+        "total": "Total (MXN)",
+        "dueDate": "Vencimiento",
+        "submit": "Agregar",
+        "created": "Cuota extraordinaria «{description}» creada.",
+        "errors": {
+          "invalid": "Revisa los datos del formulario.",
+          "saveFailed": "No se pudo guardar la cuota extraordinaria. Inténtalo de nuevo."
+        }
+      }
+    },
+    "preview": {
+      "unit": "Unidad",
+      "amount": "Importe",
+      "total": "{count, plural, one {# unidad} other {# unidades}}"
+    }
   }
 }
