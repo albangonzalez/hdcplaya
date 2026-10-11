@@ -346,5 +346,45 @@
     "title": "No access",
     "description": "Your account does not have access to this app. If you think this is a mistake, contact the administration.",
     "backToLogin": "Back to log in"
+  },
+  "Categories": {
+    "add": "Add category",
+    "empty": "No categories.",
+    "system": "System",
+    "inactive": "Inactive",
+    "columns": {
+      "nameEs": "Spanish name",
+      "nameEn": "English name",
+      "kind": "Kind",
+      "actions": "Actions"
+    },
+    "kinds": {
+      "income": "Income",
+      "expense": "Expense"
+    },
+    "actions": {
+      "openMenu": "Open menu",
+      "edit": "Edit"
+    },
+    "form": {
+      "createTitle": "Add category",
+      "editTitle": "Edit category",
+      "description": "Categories classify the condo's income and expenses.",
+      "nameEs": "Spanish name",
+      "nameEn": "English name",
+      "kind": "Kind",
+      "active": "Active",
+      "activeDescription": "An inactive category can no longer be chosen for new transactions.",
+      "systemDescription": "The app uses this category for fee payments: only its name can be changed.",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saved": "Category saved.",
+      "errors": {
+        "invalid": "Check the form details.",
+        "notFound": "The category no longer exists.",
+        "system": "This is a system category: only its name can be changed.",
+        "saveFailed": "Could not save the category. Please try again."
+      }
+    }
   }
 }

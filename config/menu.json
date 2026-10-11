@@ -19,7 +19,7 @@
         { "id": "users", "label": "users", "path": "/users", "icon": "Users" },
         { "id": "fees", "label": "fees", "path": "/fees", "icon": "Receipt" },
         { "id": "payments", "label": "payments", "path": "/payments", "icon": "HandCoins" },
-        { "id": "categories", "label": "categories", "path": "/admin/categories", "icon": "Tags" }
+        { "id": "categories", "label": "categories", "path": "/categories", "icon": "Tags" }
       ]
     },
     {

@@ -18,6 +18,16 @@ export const categorySchema = z.object({
   system: z.enum(["fees"]).nullable(),
 })
 
+// What the admin enters.
+export const categoryInputSchema = z.object({
+  kind: categoryKindSchema,
+  name: z.object({
+    es: z.string().trim().min(1),
+    en: z.string().trim().min(1),
+  }),
+  active: z.boolean(),
+})
+
 export type Category = z.infer<typeof categorySchema>
 
 export const categoriesCollection = () =>
