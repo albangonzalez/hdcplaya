@@ -510,5 +510,107 @@
       "categoryNotFound": "The category is no longer available.",
       "saveFailed": "Could not save. Please try again."
     }
+  },
+  "Balances": {
+    "regular": "Monthly fees to pay",
+    "special": "Special assessments to pay",
+    "credit": "Credit",
+    "overdue": "{amount} overdue",
+    "nothingOverdue": "Nothing overdue"
+  },
+  "MyUnits": {
+    "empty": "You have no units assigned.",
+    "unit": "Unit {identifier}"
+  },
+  "UnitBalances": {
+    "empty": "No units.",
+    "noOwner": "No owner",
+    "columns": {
+      "unit": "Unit",
+      "owners": "Owners"
+    }
+  },
+  "UnitDetail": {
+    "title": "Unit {identifier}",
+    "noOwner": "No owner",
+    "shares": "{shares, number} of 10,000 shares",
+    "actions": "Actions",
+    "openMenu": "Open menu",
+    "charges": {
+      "title": "Charges",
+      "empty": "No charges yet.",
+      "concept": "Concept",
+      "dueDate": "Due date",
+      "amount": "Amount",
+      "paid": "Paid",
+      "status": "Status",
+      "overdue": "Overdue",
+      "statuses": {
+        "open": "Pending",
+        "partial": "Partly paid",
+        "paid": "Paid",
+        "cancelled": "Cancelled"
+      }
+    },
+    "payments": {
+      "title": "Recorded payments",
+      "empty": "No payments yet.",
+      "date": "Date",
+      "method": "Method",
+      "amount": "Amount",
+      "cancelled": "Cancelled",
+      "methods": {
+        "wire": "Wire transfer",
+        "cash": "Cash"
+      }
+    },
+    "tenants": {
+      "title": "Tenants",
+      "add": "Add tenant",
+      "empty": "No tenants registered.",
+      "name": "Name",
+      "contact": "Contact",
+      "period": "Period",
+      "since": "Since {from}",
+      "fromTo": "{from} to {to}",
+      "edit": "Edit",
+      "remove": "Remove",
+      "removed": "Tenant removed.",
+      "saved": "Tenant saved.",
+      "addTitle": "Add tenant",
+      "editTitle": "Edit tenant",
+      "description": "Tenants have no account: they are only recorded on the unit.",
+      "firstName": "First name",
+      "firstLastName": "First last name",
+      "secondLastName": "Second last name",
+      "optional": "optional",
+      "contactLabel": "Contact (phone or email)",
+      "from": "From",
+      "to": "Until",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "parking": {
+      "title": "Parking spaces and licence plates",
+      "empty": "This unit has no parking spaces. The administration registers them.",
+      "space": "Parking space {label}",
+      "noPlates": "No plates allowed yet.",
+      "addPlate": "Add plate",
+      "addPlateTitle": "Add licence plate",
+      "addPlateDescription": "Vehicle allowed to use this parking space.",
+      "plate": "Plate",
+      "note": "Note",
+      "optional": "optional",
+      "cancel": "Cancel",
+      "save": "Save",
+      "plateAdded": "Plate added.",
+      "plateRemoved": "Plate removed.",
+      "removePlate": "Remove plate {plate}"
+    },
+    "errors": {
+      "invalid": "Check the form details.",
+      "notFound": "It no longer exists or you do not have access.",
+      "saveFailed": "Could not save. Please try again."
+    }
   }
 }

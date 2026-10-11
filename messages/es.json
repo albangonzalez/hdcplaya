@@ -510,5 +510,107 @@
       "categoryNotFound": "La categoría ya no está disponible.",
       "saveFailed": "No se pudo guardar. Inténtalo de nuevo."
     }
+  },
+  "Balances": {
+    "regular": "Cuotas mensuales por pagar",
+    "special": "Cuotas extraordinarias por pagar",
+    "credit": "Saldo a favor",
+    "overdue": "{amount} vencido",
+    "nothingOverdue": "Nada vencido"
+  },
+  "MyUnits": {
+    "empty": "No tienes unidades asignadas.",
+    "unit": "Unidad {identifier}"
+  },
+  "UnitBalances": {
+    "empty": "No hay unidades.",
+    "noOwner": "Sin propietario",
+    "columns": {
+      "unit": "Unidad",
+      "owners": "Propietarios"
+    }
+  },
+  "UnitDetail": {
+    "title": "Unidad {identifier}",
+    "noOwner": "Sin propietario",
+    "shares": "{shares, number} de 10,000 de indiviso",
+    "actions": "Acciones",
+    "openMenu": "Abrir menú",
+    "charges": {
+      "title": "Cargos",
+      "empty": "Aún no hay cargos.",
+      "concept": "Concepto",
+      "dueDate": "Vencimiento",
+      "amount": "Importe",
+      "paid": "Pagado",
+      "status": "Estado",
+      "overdue": "Vencido",
+      "statuses": {
+        "open": "Pendiente",
+        "partial": "Pago parcial",
+        "paid": "Pagado",
+        "cancelled": "Cancelado"
+      }
+    },
+    "payments": {
+      "title": "Pagos registrados",
+      "empty": "Aún no hay pagos.",
+      "date": "Fecha",
+      "method": "Forma de pago",
+      "amount": "Importe",
+      "cancelled": "Cancelado",
+      "methods": {
+        "wire": "Transferencia",
+        "cash": "Efectivo"
+      }
+    },
+    "tenants": {
+      "title": "Inquilinos",
+      "add": "Agregar inquilino",
+      "empty": "No hay inquilinos registrados.",
+      "name": "Nombre",
+      "contact": "Contacto",
+      "period": "Periodo",
+      "since": "Desde el {from}",
+      "fromTo": "Del {from} al {to}",
+      "edit": "Editar",
+      "remove": "Quitar",
+      "removed": "Inquilino quitado.",
+      "saved": "Inquilino guardado.",
+      "addTitle": "Agregar inquilino",
+      "editTitle": "Editar inquilino",
+      "description": "Los inquilinos no tienen cuenta: solo quedan registrados en la unidad.",
+      "firstName": "Nombre",
+      "firstLastName": "Primer apellido",
+      "secondLastName": "Segundo apellido",
+      "optional": "opcional",
+      "contactLabel": "Contacto (teléfono o correo)",
+      "from": "Desde",
+      "to": "Hasta",
+      "cancel": "Cancelar",
+      "save": "Guardar"
+    },
+    "parking": {
+      "title": "Estacionamientos y placas",
+      "empty": "Esta unidad no tiene estacionamientos. La administración los da de alta.",
+      "space": "Estacionamiento {label}",
+      "noPlates": "Sin placas autorizadas.",
+      "addPlate": "Agregar placa",
+      "addPlateTitle": "Agregar placa",
+      "addPlateDescription": "Vehículo autorizado a usar este estacionamiento.",
+      "plate": "Placa",
+      "note": "Nota",
+      "optional": "opcional",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "plateAdded": "Placa agregada.",
+      "plateRemoved": "Placa quitada.",
+      "removePlate": "Quitar la placa {plate}"
+    },
+    "errors": {
+      "invalid": "Revisa los datos del formulario.",
+      "notFound": "Ya no existe o no tienes acceso.",
+      "saveFailed": "No se pudo guardar. Inténtalo de nuevo."
+    }
   }
 }

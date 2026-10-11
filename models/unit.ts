@@ -64,6 +64,26 @@ export const unitInputSchema = z.object({
 
 export type UnitInput = z.infer<typeof unitInputSchema>
 
+// What an owner (or the admin) enters for a tenant; dates are calendar dates.
+export const tenantInputSchema = z
+  .object({
+    firstName: nameSchema,
+    firstLastName: nameSchema,
+    secondLastName: nameSchema.nullable(),
+    contact: z.string().trim(),
+    from: z.iso.date(),
+    to: z.iso.date().nullable(),
+  })
+  .refine((tenant) => tenant.to === null || tenant.to >= tenant.from, {
+    path: ["to"],
+    error: "The end date cannot be before the start date",
+  })
+
+export const plateInputSchema = z.object({
+  plate: z.string().trim().min(1).toUpperCase(),
+  note: z.string().trim().nullable(),
+})
+
 export type UnitOwner = z.infer<typeof unitOwnerSchema>
 export type Tenant = z.infer<typeof tenantSchema>
 export type Plate = z.infer<typeof plateSchema>
