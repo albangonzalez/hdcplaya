@@ -1,7 +1,8 @@
 "use client"
 
+import { useTransition } from "react"
 import { useRouter } from "next/navigation"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { toast } from "sonner"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -20,8 +21,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { setLocale } from "@/i18n/actions"
+import { locales } from "@/i18n/config"
 import { createClient } from "@/lib/supabase/client"
-import { EllipsisVerticalIcon, CircleUserRoundIcon, CreditCardIcon, BellIcon, LogOutIcon } from "lucide-react"
+import { EllipsisVerticalIcon, LanguagesIcon, LogOutIcon } from "lucide-react"
 
 export type NavUserProps = {
   user: {
@@ -42,6 +45,10 @@ export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar()
   const initials = getInitials(user.name)
   const t = useTranslations("UserMenu")
+  const tLocale = useTranslations("LocaleSwitcher")
+  const locale = useLocale()
+  const nextLocale = locales.find((candidate) => candidate !== locale) ?? locale
+  const [, startTransition] = useTransition()
   const router = useRouter()
 
   const handleLogOut = async () => {
@@ -100,20 +107,11 @@ export function NavUser({ user }: NavUserProps) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <CircleUserRoundIcon
-                />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCardIcon
-                />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <BellIcon
-                />
-                Notifications
+              <DropdownMenuItem
+                onClick={() => startTransition(() => setLocale(nextLocale))}
+              >
+                <LanguagesIcon />
+                {tLocale(nextLocale)}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

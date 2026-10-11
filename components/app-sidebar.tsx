@@ -18,11 +18,11 @@ import { getMenu, type MenuRole } from "@/lib/menu"
 import { GalleryVerticalEndIcon } from "lucide-react"
 
 export function AppSidebar({
-  role = "admin",
+  role,
   user,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
-  role?: MenuRole
+  role: MenuRole
   user: NavUserProps["user"]
 }) {
   return (

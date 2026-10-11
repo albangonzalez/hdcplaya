@@ -2,8 +2,10 @@ import { Suspense } from "react"
 import { redirect } from "next/navigation"
 
 import { AppSidebar } from "@/components/app-sidebar"
+import { LocaleSync } from "@/components/locale-sync"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { getRole } from "@/lib/auth"
 import { getCurrentUser, getFullName } from "@/lib/current-user"
 
 // Shell for every signed-in page: the sidebar and header stay mounted and
@@ -25,11 +27,13 @@ async function AppShell({ children }: { children: React.ReactNode }) {
     redirect("/login")
   }
 
-  const email = currentUser.profile?.email ?? currentUser.email ?? ""
-  const sidebarUser = {
-    name: currentUser.profile ? getFullName(currentUser.profile) : email,
-    email,
+  // Signed in with Supabase but never invited, or deactivated since.
+  const profile = currentUser.profile
+  if (!profile || profile.status === "deactivated") {
+    redirect("/auth/no-access")
   }
+
+  const sidebarUser = { name: getFullName(profile), email: profile.email }
 
   return (
     <SidebarProvider
@@ -40,7 +44,8 @@ async function AppShell({ children }: { children: React.ReactNode }) {
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" user={sidebarUser} />
+      <LocaleSync language={profile.language} />
+      <AppSidebar variant="inset" role={getRole(profile)} user={sidebarUser} />
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">{children}</div>

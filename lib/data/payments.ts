@@ -1,5 +1,5 @@
 import { condoToday } from "@/lib/condo-time"
-import { getCurrentUser } from "@/lib/current-user"
+import { requireAdmin } from "@/lib/auth"
 import { isMonthLocked } from "@/lib/payments"
 import { accountsCollection } from "@/models/account"
 import { chargesCollection } from "@/models/charge"
@@ -51,14 +51,6 @@ export type PaymentStats = {
   // What is owed, and the part of it that is past its due date.
   regular: { outstanding: number; overdue: number }
   special: { outstanding: number; overdue: number }
-}
-
-// Layouts are not re-run on every navigation, so the data checks the role too.
-async function requireAdmin() {
-  const currentUser = await getCurrentUser()
-  if (currentUser?.profile?.role !== "admin") {
-    throw new Error("Only an admin can read payments")
-  }
 }
 
 export async function getPayments(): Promise<PaymentRow[]> {

@@ -1,4 +1,5 @@
-import { getCurrentUser, getFullName } from "@/lib/current-user"
+import { requireAdmin } from "@/lib/auth"
+import { getFullName } from "@/lib/current-user"
 import { usersCollection, type User } from "@/models/user"
 
 // Plain values only, so a row can be passed to Client Components.
@@ -19,14 +20,6 @@ export type UserStats = {
   activeOwners: number
   deactivatedAccounts: number
   committeeMembers: number
-}
-
-// Layouts are not re-run on every navigation, so the data checks the role too.
-async function requireAdmin() {
-  const currentUser = await getCurrentUser()
-  if (currentUser?.profile?.role !== "admin") {
-    throw new Error("Only an admin can read users")
-  }
 }
 
 export async function getUserStats(): Promise<UserStats> {

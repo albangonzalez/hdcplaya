@@ -1,5 +1,5 @@
 import { condoToday } from "@/lib/condo-time"
-import { getCurrentUser } from "@/lib/current-user"
+import { requireAdmin } from "@/lib/auth"
 import { findFeeSetting, nextPeriod, type FeeSettingValue } from "@/lib/fees"
 import { chargesCollection } from "@/models/charge"
 import { feeSettingsCollection } from "@/models/fee-setting"
@@ -40,14 +40,6 @@ export type FeeStats = {
   // Special assessments that some unit has not finished paying.
   pendingAssessments: number
   pendingAssessmentsAmount: number
-}
-
-// Layouts are not re-run on every navigation, so the data checks the role too.
-async function requireAdmin() {
-  const currentUser = await getCurrentUser()
-  if (currentUser?.profile?.role !== "admin") {
-    throw new Error("Only an admin can read fees")
-  }
 }
 
 // The current month where the condo is, as "YYYY-MM".

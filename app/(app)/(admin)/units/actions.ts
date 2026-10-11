@@ -3,7 +3,7 @@
 import { refresh } from "next/cache"
 import { ObjectId } from "mongodb"
 
-import { getCurrentUser } from "@/lib/current-user"
+import { requireAdmin } from "@/lib/auth"
 import { objectIdStringSchema } from "@/models/shared"
 import { unitInputSchema, unitSchema, unitsCollection } from "@/models/unit"
 import { usersCollection } from "@/models/user"
@@ -21,10 +21,7 @@ export async function updateUnit(
   id: unknown,
   input: unknown
 ): Promise<UpdateUnitResult> {
-  const currentUser = await getCurrentUser()
-  if (currentUser?.profile?.role !== "admin") {
-    throw new Error("Only an admin can edit units")
-  }
+  await requireAdmin()
 
   const parsedId = objectIdStringSchema.safeParse(id)
   const parsed = unitInputSchema.safeParse(input)

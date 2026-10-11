@@ -1,10 +1,9 @@
 "use server"
 
 import { refresh } from "next/cache"
-import { headers } from "next/headers"
 import { ObjectId } from "mongodb"
 
-import { getCurrentUser } from "@/lib/current-user"
+import { requireAdmin } from "@/lib/auth"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { userInputSchema, userSchema, usersCollection } from "@/models/user"
 
@@ -15,10 +14,7 @@ export type CreateUserResult =
 // Invites the person through Supabase, then stores the user document with the
 // id Supabase gave them.
 export async function createUser(input: unknown): Promise<CreateUserResult> {
-  const currentUser = await getCurrentUser()
-  if (currentUser?.profile?.role !== "admin") {
-    throw new Error("Only an admin can create users")
-  }
+  await requireAdmin()
 
   const parsed = userInputSchema.safeParse(input)
   if (!parsed.success) {
@@ -30,9 +26,7 @@ export async function createUser(input: unknown): Promise<CreateUserResult> {
     return { ok: false, error: "emailTaken" }
   }
 
-  // The e-mailed link comes back to /auth/confirm, which opens the session.
-  // The URL must be in Supabase's allowed redirect URLs, or the Site URL is used.
-  const origin = (await headers()).get("origin")
+  // The e-mailed link goes to the Site URL set in Supabase (/auth/confirm).
   const supabase = createAdminClient()
   const { data, error } = await supabase.auth.admin.inviteUserByEmail(
     parsed.data.email

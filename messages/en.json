@@ -333,5 +333,10 @@
         "saveFailed": "Could not cancel the payment. Please try again."
       }
     }
+  },
+  "NoAccess": {
+    "title": "No access",
+    "description": "Your account does not have access to this app. If you think this is a mistake, contact the administration.",
+    "backToLogin": "Back to log in"
   }
 }

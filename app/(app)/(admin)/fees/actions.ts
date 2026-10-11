@@ -3,7 +3,7 @@
 import { refresh } from "next/cache"
 import { ObjectId } from "mongodb"
 
-import { getCurrentUser } from "@/lib/current-user"
+import { requireAdmin } from "@/lib/auth"
 import { findFeeSetting, periodDate, splitByShares } from "@/lib/fees"
 import { applyCredit } from "@/lib/payment-allocation"
 import { chargeSchema, chargesCollection } from "@/models/charge"
@@ -36,14 +36,6 @@ export type GenerateFeesResult =
 export type CreateSpecialAssessmentResult =
   | { ok: true }
   | { ok: false; error: "invalid" | "saveFailed" | SplitError }
-
-async function requireAdmin() {
-  const currentUser = await getCurrentUser()
-  if (currentUser?.profile?.role !== "admin") {
-    throw new Error("Only an admin can manage fees")
-  }
-  return currentUser.profile
-}
 
 // Every unit's part of `total`. All units are charged, with or without an
 // owner, and only when their shares cover the whole condo: otherwise the

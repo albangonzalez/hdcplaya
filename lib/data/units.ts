@@ -1,4 +1,5 @@
-import { getCurrentUser, getFullName } from "@/lib/current-user"
+import { requireAdmin } from "@/lib/auth"
+import { getFullName } from "@/lib/current-user"
 import { unitsCollection } from "@/models/unit"
 import { usersCollection } from "@/models/user"
 
@@ -22,14 +23,6 @@ export type UnitStats = {
   withoutOwner: number
   // Sum over every unit; 10,000 when every share is assigned.
   ownershipShare: number
-}
-
-// Layouts are not re-run on every navigation, so the data checks the role too.
-async function requireAdmin() {
-  const currentUser = await getCurrentUser()
-  if (currentUser?.profile?.role !== "admin") {
-    throw new Error("Only an admin can read units")
-  }
 }
 
 export async function getUnitStats(): Promise<UnitStats> {

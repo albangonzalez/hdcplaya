@@ -4,7 +4,7 @@ import { refresh } from "next/cache"
 import { ObjectId, type ClientSession } from "mongodb"
 
 import { condoToday } from "@/lib/condo-time"
-import { getCurrentUser } from "@/lib/current-user"
+import { requireAdmin } from "@/lib/auth"
 import { withTransaction } from "@/lib/mongodb"
 import { applyUnitCredit } from "@/lib/payment-allocation"
 import { chargeStatus, isMonthLocked } from "@/lib/payments"
@@ -42,14 +42,6 @@ export type CancelPaymentResult =
       ok: false
       error: "invalid" | "notFound" | "monthLocked" | "saveFailed"
     }
-
-async function requireAdmin() {
-  const currentUser = await getCurrentUser()
-  if (currentUser?.profile?.role !== "admin") {
-    throw new Error("Only an admin can manage payments")
-  }
-  return currentUser.profile
-}
 
 // The income category of the transactions payments create. It is made the
 // first time it is needed.
