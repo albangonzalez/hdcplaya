@@ -386,5 +386,51 @@
         "saveFailed": "No se pudo guardar la categoría. Inténtalo de nuevo."
       }
     }
+  },
+  "Accounts": {
+    "add": "Agregar cuenta",
+    "empty": "No hay cuentas.",
+    "inactive": "Inactiva",
+    "opening": "{amount} al {date}",
+    "stats": {
+      "total": "Saldo total",
+      "bank": "En bancos",
+      "cash": "En efectivo"
+    },
+    "columns": {
+      "name": "Cuenta",
+      "type": "Tipo",
+      "opening": "Saldo inicial",
+      "balance": "Saldo",
+      "actions": "Acciones"
+    },
+    "types": {
+      "bank": "Banco",
+      "cash": "Efectivo"
+    },
+    "actions": {
+      "openMenu": "Abrir menú",
+      "edit": "Editar"
+    },
+    "form": {
+      "createTitle": "Agregar cuenta",
+      "editTitle": "Editar cuenta",
+      "description": "El saldo de una cuenta es su saldo inicial más sus transacciones.",
+      "name": "Nombre",
+      "type": "Tipo",
+      "openingBalance": "Saldo inicial (MXN)",
+      "openingDate": "Fecha del saldo inicial",
+      "active": "Activa",
+      "activeDescription": "Una cuenta inactiva ya no se puede elegir en pagos ni transacciones nuevas.",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saved": "Cuenta guardada.",
+      "errors": {
+        "invalid": "Revisa los datos del formulario.",
+        "notFound": "La cuenta ya no existe.",
+        "nameTaken": "Ya existe una cuenta con ese nombre.",
+        "saveFailed": "No se pudo guardar la cuenta. Inténtalo de nuevo."
+      }
+    }
   }
 }

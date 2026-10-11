@@ -4,6 +4,7 @@ import { getCollection } from "@/lib/mongodb"
 import {
   cancellableStatusSchema,
   objectIdSchema,
+  objectIdStringSchema,
   positiveAmountSchema,
 } from "./shared"
 
@@ -70,6 +71,32 @@ export const transactionSchema = z
       error: "A transfer needs two different accounts",
     }
   )
+
+// What the admin enters; the date is a calendar date, "YYYY-MM-DD". A transfer
+// has a destination account and no category; the others the opposite.
+export const transactionInputSchema = z
+  .object({
+    type: z.enum(["income", "expense", "transfer"]),
+    date: z.iso.date(),
+    amount: positiveAmountSchema,
+    description: z.string().trim().min(1),
+    accountId: objectIdStringSchema,
+    toAccountId: objectIdStringSchema.nullable(),
+    categoryId: objectIdStringSchema.nullable(),
+  })
+  .refine(
+    (input) =>
+      input.type === "transfer"
+        ? input.toAccountId !== null &&
+          input.categoryId === null &&
+          input.toAccountId !== input.accountId
+        : input.toAccountId === null && input.categoryId !== null
+  )
+
+export const cancelTransactionInputSchema = z.object({
+  transactionId: objectIdStringSchema,
+  reason: z.string().trim().min(1),
+})
 
 export type Transaction = z.infer<typeof transactionSchema>
 

@@ -386,5 +386,51 @@
         "saveFailed": "Could not save the category. Please try again."
       }
     }
+  },
+  "Accounts": {
+    "add": "Add account",
+    "empty": "No accounts.",
+    "inactive": "Inactive",
+    "opening": "{amount} on {date}",
+    "stats": {
+      "total": "Total balance",
+      "bank": "In banks",
+      "cash": "In cash"
+    },
+    "columns": {
+      "name": "Account",
+      "type": "Type",
+      "opening": "Opening balance",
+      "balance": "Balance",
+      "actions": "Actions"
+    },
+    "types": {
+      "bank": "Bank",
+      "cash": "Cash"
+    },
+    "actions": {
+      "openMenu": "Open menu",
+      "edit": "Edit"
+    },
+    "form": {
+      "createTitle": "Add account",
+      "editTitle": "Edit account",
+      "description": "An account's balance is its opening balance plus its transactions.",
+      "name": "Name",
+      "type": "Type",
+      "openingBalance": "Opening balance (MXN)",
+      "openingDate": "Opening balance date",
+      "active": "Active",
+      "activeDescription": "An inactive account can no longer be chosen for new payments or transactions.",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saved": "Account saved.",
+      "errors": {
+        "invalid": "Check the form details.",
+        "notFound": "The account no longer exists.",
+        "nameTaken": "An account with that name already exists.",
+        "saveFailed": "Could not save the account. Please try again."
+      }
+    }
   }
 }

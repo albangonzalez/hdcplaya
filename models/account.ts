@@ -15,6 +15,15 @@ export const accountSchema = z.object({
   active: z.boolean(),
 })
 
+// What the admin enters; the opening date is a calendar date, "YYYY-MM-DD".
+export const accountInputSchema = z.object({
+  name: z.string().trim().min(1),
+  type: accountTypeSchema,
+  openingBalance: z.int(),
+  openingDate: z.iso.date(),
+  active: z.boolean(),
+})
+
 export type Account = z.infer<typeof accountSchema>
 
 export const accountsCollection = () => getCollection<Account>("accounts")
