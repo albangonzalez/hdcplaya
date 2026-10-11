@@ -48,4 +48,20 @@ export const userInputSchema = z
 
 export type UserInput = z.infer<typeof userInputSchema>
 
+// What the admin can change afterwards. The e-mail is the Supabase identity
+// and stays as invited.
+export const userUpdateSchema = z
+  .object({
+    firstName: nameSchema,
+    firstLastName: nameSchema,
+    secondLastName: nameSchema.nullable(),
+    role: userRoleSchema,
+    isCommittee: z.boolean(),
+    language: languageSchema,
+  })
+  .refine((user) => !user.isCommittee || user.role === "owner", {
+    path: ["isCommittee"],
+    error: "Only an owner can be a committee member",
+  })
+
 export const usersCollection = () => getCollection<User>("users")

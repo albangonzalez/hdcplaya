@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { useTranslations } from "next-intl"
 import { EllipsisVerticalIcon } from "lucide-react"
+import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -13,12 +14,30 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import type { UserRow } from "@/lib/data/users"
+import { setUserActive } from "./actions"
 import { UserFormDialog } from "./user-form-dialog"
 
-// Only "edit" is wired; the other actions are just listed.
 export function UserRowActions({ user }: { user: UserRow }) {
-  const t = useTranslations("Users.actions")
+  const t = useTranslations("Users")
   const [editOpen, setEditOpen] = useState(false)
+  const [isPending, startTransition] = useTransition()
+  const deactivated = user.status === "deactivated"
+
+  function handleStatus() {
+    startTransition(async () => {
+      const result = await setUserActive(user.id, deactivated)
+
+      if (result.ok) {
+        toast.success(
+          t(deactivated ? "reactivated" : "deactivated", {
+            name: user.fullName,
+          })
+        )
+      } else {
+        toast.error(t(`form.errors.${result.error}`))
+      }
+    })
+  }
 
   return (
     <>
@@ -33,16 +52,20 @@ export function UserRowActions({ user }: { user: UserRow }) {
           }
         >
           <EllipsisVerticalIcon />
-          <span className="sr-only">{t("openMenu")}</span>
+          <span className="sr-only">{t("actions.openMenu")}</span>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-36">
-          <DropdownMenuItem>{t("show")}</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setEditOpen(true)}>
-            {t("edit")}
+            {t("actions.edit")}
           </DropdownMenuItem>
-          <DropdownMenuItem>{t("deactivate")}</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">{t("delete")}</DropdownMenuItem>
+          <DropdownMenuItem
+            variant={deactivated ? "default" : "destructive"}
+            disabled={isPending}
+            onClick={handleStatus}
+          >
+            {t(deactivated ? "actions.reactivate" : "actions.deactivate")}
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <UserFormDialog user={user} open={editOpen} onOpenChange={setEditOpen} />

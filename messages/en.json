@@ -82,10 +82,9 @@
     },
     "actions": {
       "openMenu": "Open menu",
-      "show": "Show",
       "edit": "Edit",
       "deactivate": "Deactivate",
-      "delete": "Delete"
+      "reactivate": "Reactivate"
     },
     "empty": "No users.",
     "stats": {
@@ -115,13 +114,22 @@
         "invalid": "Check the form details.",
         "emailTaken": "A user with that email already exists.",
         "inviteFailed": "Could not send the invitation. Please try again.",
-        "saveFailed": "Could not save the user. Please try again."
-      }
+        "saveFailed": "Could not save the user. Please try again.",
+        "notFound": "The user no longer exists.",
+        "self": "You cannot remove your own access or admin role."
+      },
+      "saved": "User saved."
     },
     "languages": {
       "es": "Spanish",
       "en": "English"
-    }
+    },
+    "statuses": {
+      "invited": "Invited",
+      "deactivated": "Deactivated"
+    },
+    "deactivated": "{name}'s account was deactivated.",
+    "reactivated": "{name}'s account was reactivated."
   },
   "Units": {
     "columns": {

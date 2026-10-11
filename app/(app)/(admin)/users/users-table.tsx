@@ -45,6 +45,11 @@ export async function UsersTable() {
                     {user.isCommittee && (
                       <Badge variant="secondary">{t("roles.committee")}</Badge>
                     )}
+                    {user.status !== "active" && (
+                      <Badge variant="outline" className="text-muted-foreground">
+                        {t(`statuses.${user.status}`)}
+                      </Badge>
+                    )}
                   </div>
                 </TableCell>
                 <TableCell>{user.email}</TableCell>

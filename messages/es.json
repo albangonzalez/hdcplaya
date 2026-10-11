@@ -82,10 +82,9 @@
     },
     "actions": {
       "openMenu": "Abrir menú",
-      "show": "Ver",
       "edit": "Editar",
       "deactivate": "Desactivar",
-      "delete": "Eliminar"
+      "reactivate": "Reactivar"
     },
     "empty": "No hay usuarios.",
     "stats": {
@@ -115,13 +114,22 @@
         "invalid": "Revisa los datos del formulario.",
         "emailTaken": "Ya existe un usuario con ese correo electrónico.",
         "inviteFailed": "No se pudo enviar la invitación. Inténtalo de nuevo.",
-        "saveFailed": "No se pudo guardar el usuario. Inténtalo de nuevo."
-      }
+        "saveFailed": "No se pudo guardar el usuario. Inténtalo de nuevo.",
+        "notFound": "El usuario ya no existe.",
+        "self": "No puedes quitarte el acceso ni el rol de administrador a ti mismo."
+      },
+      "saved": "Usuario guardado."
     },
     "languages": {
       "es": "Español",
       "en": "Inglés"
-    }
+    },
+    "statuses": {
+      "invited": "Invitado",
+      "deactivated": "Desactivado"
+    },
+    "deactivated": "Se desactivó la cuenta de {name}.",
+    "reactivated": "Se reactivó la cuenta de {name}."
   },
   "Units": {
     "columns": {

@@ -31,7 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import type { UserRow } from "@/lib/data/users"
-import { createUser } from "./actions"
+import { createUser, updateUser } from "./actions"
 
 type UserFormDialogProps = {
   // Without a user the dialog creates one; with a user it edits it.
@@ -65,8 +65,17 @@ export function UserFormDialog({
   )
 }
 
-function UserForm({ user, onDone }: { user?: UserRow; onDone: () => void }) {
+function UserForm({
+  user: currentUser,
+  onDone,
+}: {
+  user?: UserRow
+  onDone: () => void
+}) {
   const t = useTranslations("Users")
+  // The values the form opened with: the row refreshes after a save while
+  // the dialog is still closing, and the defaults must not change then.
+  const [user] = useState(currentUser)
   const [role, setRole] = useState<UserRow["role"]>(user?.role ?? "owner")
   const [language, setLanguage] = useState<UserRow["language"]>(
     user?.language ?? "es"
@@ -87,17 +96,30 @@ function UserForm({ user, onDone }: { user?: UserRow; onDone: () => void }) {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    // Editing is not wired yet; it only closes the dialog.
-    if (user) {
-      onDone()
-      return
-    }
-
     const formData = new FormData(event.currentTarget)
     const text = (name: string) => String(formData.get(name) ?? "").trim()
     const email = text("email")
 
     startTransition(async () => {
+      if (user) {
+        const result = await updateUser(user.id, {
+          firstName: text("firstName"),
+          firstLastName: text("firstLastName"),
+          secondLastName: text("secondLastName") || null,
+          role,
+          isCommittee,
+          language,
+        })
+
+        if (result.ok) {
+          toast.success(t("form.saved"))
+          onDone()
+        } else {
+          toast.error(t(`form.errors.${result.error}`))
+        }
+        return
+      }
+
       const result = await createUser({
         email,
         firstName: text("firstName"),
@@ -168,6 +190,8 @@ function UserForm({ user, onDone }: { user?: UserRow; onDone: () => void }) {
             type="email"
             defaultValue={user?.email}
             autoComplete="off"
+            // The e-mail is the person's sign-in identity: fixed once invited.
+            disabled={Boolean(user)}
             required
           />
         </Field>
