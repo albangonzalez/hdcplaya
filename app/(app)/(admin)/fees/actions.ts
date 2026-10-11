@@ -3,6 +3,7 @@
 import { refresh } from "next/cache"
 import { ObjectId } from "mongodb"
 
+import { recordAudit } from "@/lib/audit"
 import { requireAdmin } from "@/lib/auth"
 import { findFeeSetting, periodDate, splitByShares } from "@/lib/fees"
 import { applyCredit } from "@/lib/payment-allocation"
@@ -77,7 +78,7 @@ async function splitBetweenUnits(
 export async function saveFeeSetting(
   input: unknown
 ): Promise<SaveFeeSettingResult> {
-  await requireAdmin()
+  const admin = await requireAdmin()
 
   const parsed = feeSettingInputSchema.safeParse(input)
   if (!parsed.success) {
@@ -99,11 +100,20 @@ export async function saveFeeSetting(
       ...parsed.data,
     })
     // Saving again for the same month replaces what was entered for it.
+    const before = await feeSettingsCollection().findOne({ effectiveFrom })
     await feeSettingsCollection().updateOne(
       { effectiveFrom },
       { $set: setting, $setOnInsert: { _id } },
       { upsert: true }
     )
+    await recordAudit({
+      actorId: admin._id,
+      action: before ? "update" : "create",
+      collection: "feeSettings",
+      documentId: before?._id ?? _id,
+      before,
+      after: { _id: before?._id ?? _id, ...setting },
+    })
   } catch (saveError) {
     console.error("Saving the fee settings failed", saveError)
     return { ok: false, error: "saveFailed" }
@@ -118,7 +128,7 @@ export async function saveFeeSetting(
 export async function generateFees(
   input: unknown
 ): Promise<GenerateFeesResult> {
-  await requireAdmin()
+  const admin = await requireAdmin()
 
   const parsed = periodSchema.safeParse(input)
   if (!parsed.success) {
@@ -164,6 +174,15 @@ export async function generateFees(
 
     if (missing.length > 0) {
       await charges.insertMany(missing)
+      await recordAudit(
+        missing.map((charge) => ({
+          actorId: admin._id,
+          action: "create" as const,
+          collection: "charges" as const,
+          documentId: charge._id,
+          after: charge,
+        }))
+      )
       // A unit that had paid in advance has its credit applied at once.
       await applyCredit()
     }
@@ -224,6 +243,13 @@ export async function createSpecialAssessment(
 
     await assessments.insertOne(assessment)
     await charges.insertMany(unitCharges)
+    await recordAudit({
+      actorId: admin._id,
+      action: "create",
+      collection: "specialAssessments",
+      documentId: assessmentId,
+      after: assessment,
+    })
   } catch (saveError) {
     // An assessment without all its charges would undercharge: undo it.
     console.error("Saving the special assessment failed", saveError)

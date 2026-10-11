@@ -3,6 +3,7 @@
 import { refresh } from "next/cache"
 import { ObjectId } from "mongodb"
 
+import { recordAudit } from "@/lib/audit"
 import { requireAdmin } from "@/lib/auth"
 import { objectIdStringSchema } from "@/models/shared"
 import { unitInputSchema, unitSchema, unitsCollection } from "@/models/unit"
@@ -21,7 +22,7 @@ export async function updateUnit(
   id: unknown,
   input: unknown
 ): Promise<UpdateUnitResult> {
-  await requireAdmin()
+  const admin = await requireAdmin()
 
   const parsedId = objectIdStringSchema.safeParse(id)
   const parsed = unitInputSchema.safeParse(input)
@@ -79,6 +80,14 @@ export async function updateUnit(
       updatedAt: now,
     })
     await units.updateOne({ _id }, { $set: fields })
+    await recordAudit({
+      actorId: admin._id,
+      action: "update",
+      collection: "units",
+      documentId: _id,
+      before: unit,
+      after: { _id, ...fields },
+    })
   } catch (saveError) {
     console.error("Saving the unit failed", saveError)
     return { ok: false, error: "saveFailed" }

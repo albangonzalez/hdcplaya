@@ -4,6 +4,7 @@ import { refresh } from "next/cache"
 import { ObjectId, type ClientSession } from "mongodb"
 
 import { condoToday } from "@/lib/condo-time"
+import { recordAudit } from "@/lib/audit"
 import { requireAdmin } from "@/lib/auth"
 import { withTransaction } from "@/lib/mongodb"
 import { applyUnitCredit } from "@/lib/payment-allocation"
@@ -103,43 +104,58 @@ export async function recordPayment(
       const paymentId = new ObjectId()
       const transactionId = new ObjectId()
 
-      await transactionsCollection().insertOne(
-        transactionSchema.parse({
-          _id: transactionId,
-          type: "income",
-          date,
-          amount: parsed.data.amount,
-          description: `Pago de cuotas · ${unit.identifier}`,
-          accountId,
-          toAccountId: null,
-          categoryId: await getFeesCategoryId(session),
-          paymentId,
-          status: "active",
-          cancelReason: null,
-          createdBy: admin._id,
-          createdAt: now,
-          updatedAt: now,
-        }),
-        { session }
-      )
+      const transaction = transactionSchema.parse({
+        _id: transactionId,
+        type: "income",
+        date,
+        amount: parsed.data.amount,
+        description: `Pago de cuotas · ${unit.identifier}`,
+        accountId,
+        toAccountId: null,
+        categoryId: await getFeesCategoryId(session),
+        paymentId,
+        status: "active",
+        cancelReason: null,
+        createdBy: admin._id,
+        createdAt: now,
+        updatedAt: now,
+      })
+      await transactionsCollection().insertOne(transaction, { session })
       // Saved unapplied; applying the unit's credit is what pays its charges.
-      await paymentsCollection().insertOne(
-        paymentSchema.parse({
-          _id: paymentId,
-          unitId,
-          date,
-          amount: parsed.data.amount,
-          method: parsed.data.method,
-          accountId,
-          allocations: [],
-          unallocatedAmount: parsed.data.amount,
-          transactionId,
-          status: "active",
-          cancelReason: null,
-          recordedBy: admin._id,
-          createdAt: now,
-        }),
-        { session }
+      const payment = paymentSchema.parse({
+        _id: paymentId,
+        unitId,
+        date,
+        amount: parsed.data.amount,
+        method: parsed.data.method,
+        accountId,
+        allocations: [],
+        unallocatedAmount: parsed.data.amount,
+        transactionId,
+        status: "active",
+        cancelReason: null,
+        recordedBy: admin._id,
+        createdAt: now,
+      })
+      await paymentsCollection().insertOne(payment, { session })
+      await recordAudit(
+        [
+          {
+            actorId: admin._id,
+            action: "create",
+            collection: "payments",
+            documentId: paymentId,
+            after: payment,
+          },
+          {
+            actorId: admin._id,
+            action: "create",
+            collection: "transactions",
+            documentId: transactionId,
+            after: transaction,
+          },
+        ],
+        session
       )
       await applyUnitCredit(unitId, session)
     })
@@ -158,7 +174,7 @@ export async function recordPayment(
 export async function cancelPayment(
   input: unknown
 ): Promise<CancelPaymentResult> {
-  await requireAdmin()
+  const admin = await requireAdmin()
 
   const parsed = cancelPaymentInputSchema.safeParse(input)
   if (!parsed.success) {
@@ -218,7 +234,29 @@ export async function cancelPayment(
           },
           { session }
         )
+        await recordAudit(
+          {
+            actorId: admin._id,
+            action: "cancel",
+            collection: "transactions",
+            documentId: transaction._id,
+            before: transaction,
+            after: updated,
+          },
+          session
+        )
       }
+      await recordAudit(
+        {
+          actorId: admin._id,
+          action: "cancel",
+          collection: "payments",
+          documentId: payment._id,
+          before: payment,
+          after: cancelled,
+        },
+        session
+      )
 
       const charges = chargesCollection()
       for (const allocation of payment.allocations) {

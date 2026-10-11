@@ -3,6 +3,7 @@
 import { refresh } from "next/cache"
 import { ObjectId } from "mongodb"
 
+import { recordAudit } from "@/lib/audit"
 import { requireAdmin } from "@/lib/auth"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { userInputSchema, userSchema, usersCollection } from "@/models/user"
@@ -14,7 +15,7 @@ export type CreateUserResult =
 // Invites the person through Supabase, then stores the user document with the
 // id Supabase gave them.
 export async function createUser(input: unknown): Promise<CreateUserResult> {
-  await requireAdmin()
+  const admin = await requireAdmin()
 
   const parsed = userInputSchema.safeParse(input)
   if (!parsed.success) {
@@ -42,16 +43,22 @@ export async function createUser(input: unknown): Promise<CreateUserResult> {
 
   try {
     const now = new Date()
-    await users.insertOne(
-      userSchema.parse({
-        ...parsed.data,
-        _id: new ObjectId(),
-        supabaseUserId: data.user.id,
-        status: "invited",
-        createdAt: now,
-        updatedAt: now,
-      })
-    )
+    const user = userSchema.parse({
+      ...parsed.data,
+      _id: new ObjectId(),
+      supabaseUserId: data.user.id,
+      status: "invited",
+      createdAt: now,
+      updatedAt: now,
+    })
+    await users.insertOne(user)
+    await recordAudit({
+      actorId: admin._id,
+      action: "create",
+      collection: "users",
+      documentId: user._id,
+      after: user,
+    })
   } catch (insertError) {
     // Without a document the invited account would have no profile: undo it.
     console.error("Saving the invited user failed", insertError)
