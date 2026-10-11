@@ -261,5 +261,77 @@
       "amount": "Amount",
       "total": "{count, plural, one {# unit} other {# units}}"
     }
+  },
+  "Payments": {
+    "record": "Record payment",
+    "empty": "No payments recorded.",
+    "cancelled": "Cancelled",
+    "columns": {
+      "date": "Date",
+      "unit": "Unit",
+      "method": "Method",
+      "account": "Account",
+      "amount": "Amount",
+      "actions": "Actions"
+    },
+    "methods": {
+      "wire": "Wire transfer",
+      "cash": "Cash"
+    },
+    "actions": {
+      "openMenu": "Open menu",
+      "cancel": "Cancel payment"
+    },
+    "stats": {
+      "receivedThisMonth": "Received this month",
+      "payments": "{count, plural, =0 {No payments} one {# payment} other {# payments}}",
+      "regularOutstanding": "Monthly fees outstanding",
+      "specialOutstanding": "Special assessments outstanding",
+      "overdue": "{amount} overdue"
+    },
+    "form": {
+      "title": "Record payment",
+      "description": "The payment is applied to the unit's oldest charges first. Anything left over is kept as credit.",
+      "unit": "Unit",
+      "unitPlaceholder": "Choose a unit",
+      "amount": "Amount (MXN)",
+      "date": "Date",
+      "method": "Method",
+      "account": "Account",
+      "accountPlaceholder": "Choose",
+      "cancel": "Cancel",
+      "submit": "Record",
+      "recorded": "Payment for unit {unit} recorded.",
+      "noAccounts": "There are no active accounts to receive the payment.",
+      "errors": {
+        "invalid": "Check the form details.",
+        "futureDate": "The date cannot be later than today.",
+        "monthLocked": "That month is closed: payments can only be recorded until 7 days after it ends.",
+        "unitNotFound": "The unit no longer exists.",
+        "accountNotFound": "The account is no longer available.",
+        "saveFailed": "Could not record the payment. Please try again."
+      }
+    },
+    "preview": {
+      "regularOwed": "Monthly fees:",
+      "specialOwed": "Special:",
+      "partial": "partial",
+      "credit": "Credit"
+    },
+    "cancel": {
+      "title": "Cancel payment",
+      "summary": "{amount} from unit {unit}, dated {date}.",
+      "reason": "Reason",
+      "description": "The charges it covered become outstanding again and its income is cancelled. The payment is not deleted.",
+      "keep": "Keep",
+      "submit": "Cancel payment",
+      "done": "Payment cancelled.",
+      "errors": {
+        "invalid": "Enter the reason for cancelling.",
+        "notFound": "The payment is no longer active.",
+        "monthLocked": "That month is closed: the payment can no longer be cancelled.",
+        "saveFailed": "Could not cancel the payment. Please try again."
+      }
+    }
   }
 }

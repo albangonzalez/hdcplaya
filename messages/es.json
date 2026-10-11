@@ -261,5 +261,77 @@
       "amount": "Importe",
       "total": "{count, plural, one {# unidad} other {# unidades}}"
     }
+  },
+  "Payments": {
+    "record": "Registrar pago",
+    "empty": "No hay pagos registrados.",
+    "cancelled": "Cancelado",
+    "columns": {
+      "date": "Fecha",
+      "unit": "Unidad",
+      "method": "Forma de pago",
+      "account": "Cuenta",
+      "amount": "Importe",
+      "actions": "Acciones"
+    },
+    "methods": {
+      "wire": "Transferencia",
+      "cash": "Efectivo"
+    },
+    "actions": {
+      "openMenu": "Abrir menú",
+      "cancel": "Cancelar pago"
+    },
+    "stats": {
+      "receivedThisMonth": "Recibido este mes",
+      "payments": "{count, plural, =0 {Sin pagos} one {# pago} other {# pagos}}",
+      "regularOutstanding": "Cuotas mensuales por cobrar",
+      "specialOutstanding": "Cuotas extraordinarias por cobrar",
+      "overdue": "{amount} vencido"
+    },
+    "form": {
+      "title": "Registrar pago",
+      "description": "El pago se aplica primero a los cargos más antiguos de la unidad. Lo que sobre queda como saldo a favor.",
+      "unit": "Unidad",
+      "unitPlaceholder": "Elige una unidad",
+      "amount": "Importe (MXN)",
+      "date": "Fecha",
+      "method": "Forma de pago",
+      "account": "Cuenta",
+      "accountPlaceholder": "Elige",
+      "cancel": "Cancelar",
+      "submit": "Registrar",
+      "recorded": "Pago de la unidad {unit} registrado.",
+      "noAccounts": "No hay cuentas activas en las que recibir el pago.",
+      "errors": {
+        "invalid": "Revisa los datos del formulario.",
+        "futureDate": "La fecha no puede ser posterior a hoy.",
+        "monthLocked": "Ese mes ya está cerrado: solo se puede registrar hasta 7 días después de su fin.",
+        "unitNotFound": "La unidad ya no existe.",
+        "accountNotFound": "La cuenta ya no está disponible.",
+        "saveFailed": "No se pudo registrar el pago. Inténtalo de nuevo."
+      }
+    },
+    "preview": {
+      "regularOwed": "Cuotas mensuales:",
+      "specialOwed": "Extraordinarias:",
+      "partial": "parcial",
+      "credit": "Saldo a favor"
+    },
+    "cancel": {
+      "title": "Cancelar pago",
+      "summary": "{amount} de la unidad {unit}, del {date}.",
+      "reason": "Motivo",
+      "description": "Los cargos que cubría vuelven a quedar pendientes y su ingreso se cancela. El pago no se borra.",
+      "keep": "Conservar",
+      "submit": "Cancelar pago",
+      "done": "Pago cancelado.",
+      "errors": {
+        "invalid": "Escribe el motivo de la cancelación.",
+        "notFound": "El pago ya no está activo.",
+        "monthLocked": "Ese mes ya está cerrado: el pago ya no se puede cancelar.",
+        "saveFailed": "No se pudo cancelar el pago. Inténtalo de nuevo."
+      }
+    }
   }
 }

@@ -13,6 +13,9 @@ export const categorySchema = z.object({
     en: z.string().trim().min(1),
   }),
   active: z.boolean(),
+  // Set on a category the app itself uses: "fees" is the income category of
+  // the transactions created by recorded payments. Null for the others.
+  system: z.enum(["fees"]).nullable(),
 })
 
 export type Category = z.infer<typeof categorySchema>

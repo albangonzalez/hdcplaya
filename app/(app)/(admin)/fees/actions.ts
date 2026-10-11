@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb"
 
 import { getCurrentUser } from "@/lib/current-user"
 import { findFeeSetting, periodDate, splitByShares } from "@/lib/fees"
+import { applyCredit } from "@/lib/payment-allocation"
 import { chargeSchema, chargesCollection } from "@/models/charge"
 import {
   feeSettingInputSchema,
@@ -171,6 +172,8 @@ export async function generateFees(
 
     if (missing.length > 0) {
       await charges.insertMany(missing)
+      // A unit that had paid in advance has its credit applied at once.
+      await applyCredit()
     }
 
     refresh()
@@ -236,6 +239,9 @@ export async function createSpecialAssessment(
     await assessments.deleteOne({ _id: assessmentId })
     return { ok: false, error: "saveFailed" }
   }
+
+  // A unit that had paid in advance has its credit applied at once.
+  await applyCredit()
 
   refresh()
   return { ok: true }

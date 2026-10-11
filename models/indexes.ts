@@ -1,5 +1,6 @@
 import { accountsCollection } from "./account"
 import { auditLogsCollection } from "./audit-log"
+import { categoriesCollection } from "./category"
 import { chargesCollection } from "./charge"
 import { feeSettingsCollection } from "./fee-setting"
 import { filesCollection } from "./file"
@@ -34,6 +35,12 @@ export async function ensureIndexes() {
     paymentsCollection().createIndex({ unitId: 1, date: -1 }),
 
     accountsCollection().createIndex({ name: 1 }, { unique: true }),
+
+    // There is one category per system role.
+    categoriesCollection().createIndex(
+      { system: 1 },
+      { unique: true, partialFilterExpression: { system: { $type: "string" } } }
+    ),
 
     transactionsCollection().createIndex({ date: -1 }),
     transactionsCollection().createIndex({ accountId: 1, date: -1 }),

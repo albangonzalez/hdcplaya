@@ -251,7 +251,8 @@ Eleven MongoDB collections cover the minimal version. Collection and field names
 { _id, name, type: "bank" | "cash", openingBalance, openingDate, active }
 
 // categories
-{ _id, kind: "income" | "expense", name: { es, en }, active }
+{ _id, kind: "income" | "expense", name: { es, en }, active,
+  system: "fees" | null }               // "fees": used by recorded payments
 
 // transactions
 {

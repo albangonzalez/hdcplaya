@@ -5,6 +5,7 @@ import {
   amountSchema,
   cancellableStatusSchema,
   objectIdSchema,
+  objectIdStringSchema,
   positiveAmountSchema,
 } from "./shared"
 
@@ -51,6 +52,20 @@ export const paymentSchema = z
       error: "cancelReason is required when cancelled, and only then",
     }
   )
+
+// What the admin enters; the date is a calendar date, "YYYY-MM-DD".
+export const paymentInputSchema = z.object({
+  unitId: objectIdStringSchema,
+  amount: positiveAmountSchema,
+  date: z.iso.date(),
+  method: paymentMethodSchema,
+  accountId: objectIdStringSchema,
+})
+
+export const cancelPaymentInputSchema = z.object({
+  paymentId: objectIdStringSchema,
+  reason: z.string().trim().min(1),
+})
 
 export type PaymentAllocation = z.infer<typeof paymentAllocationSchema>
 export type Payment = z.infer<typeof paymentSchema>

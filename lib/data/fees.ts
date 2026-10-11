@@ -1,3 +1,4 @@
+import { condoToday } from "@/lib/condo-time"
 import { getCurrentUser } from "@/lib/current-user"
 import { findFeeSetting, nextPeriod, type FeeSettingValue } from "@/lib/fees"
 import { chargesCollection } from "@/models/charge"
@@ -51,11 +52,7 @@ async function requireAdmin() {
 
 // The current month where the condo is, as "YYYY-MM".
 function currentPeriod(): string {
-  return new Intl.DateTimeFormat("en-CA", {
-    timeZone: "America/Cancun",
-    year: "numeric",
-    month: "2-digit",
-  }).format(new Date())
+  return condoToday().slice(0, 7)
 }
 
 export async function getFeeSettings(): Promise<FeeSettingRow[]> {
