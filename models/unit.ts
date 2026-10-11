@@ -51,6 +51,15 @@ export const unitInputSchema = z.object({
   identifier: z.string().trim().min(1),
   ownershipShare: z.int().min(0).max(OWNERSHIP_SHARE_TOTAL),
   ownerIds: z.array(objectIdStringSchema),
+  // The day a change of owners takes effect, "YYYY-MM-DD".
+  ownersChangedOn: z.iso.date(),
+  // A space keeps its licence plates through its id; one without an id is new.
+  parkingSpaces: z.array(
+    z.object({
+      id: objectIdStringSchema.nullable(),
+      label: z.string().trim().min(1),
+    })
+  ),
 })
 
 export type UnitInput = z.infer<typeof unitInputSchema>

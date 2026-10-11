@@ -1,53 +1,59 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { PlusIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { EllipsisVerticalIcon } from "lucide-react"
 
+import { RowActions } from "@/components/row-actions"
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import type { OwnerOption, UnitRow } from "@/lib/data/units"
 import { UnitFormDialog } from "./unit-form-dialog"
 
+type FormProps = {
+  ownerOptions: OwnerOption[]
+  // Today's date where the condo is, "YYYY-MM-DD".
+  today: string
+}
+
+export function AddUnitButton(props: FormProps) {
+  const t = useTranslations("Units")
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <Button size="sm" onClick={() => setOpen(true)}>
+        <PlusIcon />
+        {t("add")}
+      </Button>
+      <UnitFormDialog {...props} open={open} onOpenChange={setOpen} />
+    </>
+  )
+}
+
 export function UnitRowActions({
   unit,
-  ownerOptions,
-}: {
-  unit: UnitRow
-  ownerOptions: OwnerOption[]
-}) {
+  ...props
+}: FormProps & { unit: UnitRow }) {
   const t = useTranslations("Units.actions")
+  const router = useRouter()
   const [editOpen, setEditOpen] = useState(false)
 
   return (
     <>
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={
-            <Button
-              variant="ghost"
-              className="flex size-8 text-muted-foreground data-open:bg-muted"
-              size="icon"
-            />
-          }
-        >
-          <EllipsisVerticalIcon />
-          <span className="sr-only">{t("openMenu")}</span>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-36">
-          <DropdownMenuItem onClick={() => setEditOpen(true)}>
-            {t("edit")}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <RowActions
+        label={t("openMenu")}
+        actions={[
+          {
+            label: t("view"),
+            onClick: () => router.push(`/units/${unit.id}`),
+          },
+          { label: t("edit"), onClick: () => setEditOpen(true) },
+        ]}
+      />
       <UnitFormDialog
         unit={unit}
-        ownerOptions={ownerOptions}
+        {...props}
         open={editOpen}
         onOpenChange={setEditOpen}
       />

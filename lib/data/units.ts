@@ -16,6 +16,7 @@ export type UnitRow = {
   ownershipShare: number
   // The current owners; past ones stay in the document as history.
   owners: OwnerOption[]
+  parkingSpaces: { id: string; label: string }[]
 }
 
 export type UnitStats = {
@@ -66,6 +67,10 @@ export async function getUnits(): Promise<UnitRow[]> {
     id: unit._id.toHexString(),
     identifier: unit.identifier,
     ownershipShare: unit.ownershipShare,
+    parkingSpaces: unit.parkingSpaces.map((space) => ({
+      id: space._id.toHexString(),
+      label: space.label,
+    })),
     owners: currentOwnerIds(unit)
       .map((userId) => userId.toHexString())
       .filter((id) => ownerNames.has(id))

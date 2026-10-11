@@ -136,12 +136,14 @@
       "unit": "Unit",
       "ownershipShare": "Ownership share",
       "owners": "Owners",
-      "actions": "Actions"
+      "actions": "Actions",
+      "parking": "Parking spaces"
     },
     "noOwner": "No owner",
     "actions": {
       "openMenu": "Open menu",
-      "edit": "Edit"
+      "edit": "Edit",
+      "view": "View details"
     },
     "empty": "No units.",
     "stats": {
@@ -158,7 +160,6 @@
       "ownershipShareDescription": "Shares out of a total of {total, number}.",
       "owners": "Owners",
       "ownersPlaceholder": "No owner",
-      "ownersDescription": "A change of owner is recorded with today's date.",
       "noOwnersAvailable": "There are no users with the owner role yet.",
       "cancel": "Cancel",
       "save": "Save",
@@ -167,9 +168,19 @@
         "invalid": "Check the form details.",
         "notFound": "The unit no longer exists.",
         "identifierTaken": "A unit with that identifier already exists.",
-        "saveFailed": "Could not save the unit. Please try again."
-      }
-    }
+        "saveFailed": "Could not save the unit. Please try again.",
+        "futureDate": "The date cannot be later than today."
+      },
+      "createTitle": "Add unit",
+      "createDescription": "A new unit starts with no charges or payments.",
+      "ownersChangedOn": "Date of the change of owner",
+      "ownersChangedOnDescription": "Only used when the owners change.",
+      "parkingSpaces": "Parking spaces",
+      "parkingLabel": "Label, e.g. E-12",
+      "addParking": "Add parking space",
+      "removeParking": "Remove"
+    },
+    "add": "Add unit"
   },
   "Fees": {
     "cancel": "Cancel",
