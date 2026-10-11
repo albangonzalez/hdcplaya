@@ -432,5 +432,72 @@
         "saveFailed": "No se pudo guardar la cuenta. Inténtalo de nuevo."
       }
     }
+  },
+  "Transactions": {
+    "add": "Agregar transacción",
+    "empty": "No hay transacciones en este mes.",
+    "cancelled": "Cancelada",
+    "previousMonth": "Mes anterior",
+    "nextMonth": "Mes siguiente",
+    "balanceOf": "Saldo de {account}",
+    "stats": {
+      "income": "Ingresos del mes",
+      "expenses": "Gastos del mes",
+      "result": "Resultado del mes"
+    },
+    "columns": {
+      "date": "Fecha",
+      "description": "Descripción",
+      "category": "Categoría",
+      "account": "Cuenta",
+      "amount": "Importe",
+      "actions": "Acciones"
+    },
+    "types": {
+      "income": "Ingreso",
+      "expense": "Gasto",
+      "transfer": "Traspaso"
+    },
+    "actions": {
+      "openMenu": "Abrir menú",
+      "edit": "Editar",
+      "cancel": "Cancelar transacción"
+    },
+    "form": {
+      "createTitle": "Agregar transacción",
+      "editTitle": "Editar transacción",
+      "description": "Un traspaso mueve dinero entre dos cuentas y no cuenta como ingreso ni gasto.",
+      "type": "Tipo",
+      "date": "Fecha",
+      "amount": "Importe (MXN)",
+      "account": "Cuenta",
+      "fromAccount": "Cuenta de origen",
+      "toAccount": "Cuenta de destino",
+      "category": "Categoría",
+      "descriptionLabel": "Descripción",
+      "choose": "Elige",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saved": "Transacción guardada."
+    },
+    "cancel": {
+      "title": "Cancelar transacción",
+      "summary": "{description}: {amount}, del {date}.",
+      "reason": "Motivo",
+      "description": "La transacción queda en el libro, tachada, y deja de contar en totales y saldos.",
+      "keep": "Conservar",
+      "submit": "Cancelar transacción",
+      "done": "Transacción cancelada."
+    },
+    "errors": {
+      "invalid": "Revisa los datos del formulario.",
+      "notFound": "La transacción ya no está activa.",
+      "fromPayment": "Esta transacción viene de un pago: corrígela desde Pagos.",
+      "futureDate": "La fecha no puede ser posterior a hoy.",
+      "monthLocked": "Ese mes ya está cerrado: solo se puede modificar hasta 7 días después de su fin.",
+      "accountNotFound": "La cuenta ya no está disponible.",
+      "categoryNotFound": "La categoría ya no está disponible.",
+      "saveFailed": "No se pudo guardar. Inténtalo de nuevo."
+    }
   }
 }

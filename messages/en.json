@@ -432,5 +432,72 @@
         "saveFailed": "Could not save the account. Please try again."
       }
     }
+  },
+  "Transactions": {
+    "add": "Add transaction",
+    "empty": "No transactions this month.",
+    "cancelled": "Cancelled",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "balanceOf": "{account} balance",
+    "stats": {
+      "income": "Income this month",
+      "expenses": "Expenses this month",
+      "result": "Result for the month"
+    },
+    "columns": {
+      "date": "Date",
+      "description": "Description",
+      "category": "Category",
+      "account": "Account",
+      "amount": "Amount",
+      "actions": "Actions"
+    },
+    "types": {
+      "income": "Income",
+      "expense": "Expense",
+      "transfer": "Transfer"
+    },
+    "actions": {
+      "openMenu": "Open menu",
+      "edit": "Edit",
+      "cancel": "Cancel transaction"
+    },
+    "form": {
+      "createTitle": "Add transaction",
+      "editTitle": "Edit transaction",
+      "description": "A transfer moves money between two accounts and does not count as income or expense.",
+      "type": "Type",
+      "date": "Date",
+      "amount": "Amount (MXN)",
+      "account": "Account",
+      "fromAccount": "From account",
+      "toAccount": "To account",
+      "category": "Category",
+      "descriptionLabel": "Description",
+      "choose": "Choose",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saved": "Transaction saved."
+    },
+    "cancel": {
+      "title": "Cancel transaction",
+      "summary": "{description}: {amount}, dated {date}.",
+      "reason": "Reason",
+      "description": "The transaction stays in the ledger, struck out, and no longer counts in totals or balances.",
+      "keep": "Keep",
+      "submit": "Cancel transaction",
+      "done": "Transaction cancelled."
+    },
+    "errors": {
+      "invalid": "Check the form details.",
+      "notFound": "The transaction is no longer active.",
+      "fromPayment": "This transaction comes from a payment: correct it from Payments.",
+      "futureDate": "The date cannot be later than today.",
+      "monthLocked": "That month is closed: it can only be changed until 7 days after it ends.",
+      "accountNotFound": "The account is no longer available.",
+      "categoryNotFound": "The category is no longer available.",
+      "saveFailed": "Could not save. Please try again."
+    }
   }
 }
