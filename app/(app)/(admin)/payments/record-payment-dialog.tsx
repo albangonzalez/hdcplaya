@@ -2,9 +2,10 @@
 
 import { useState, useTransition } from "react"
 import { PlusIcon } from "lucide-react"
-import { useFormatter, useTranslations } from "next-intl"
+import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 
+import { useFormat } from "@/hooks/use-format"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -24,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { formatMoney } from "@/lib/format"
 import type { PaymentFormData, PaymentUnit } from "@/lib/data/payments"
 import { periodDate } from "@/lib/fees"
 import { allocateOldestFirst } from "@/lib/payments"
@@ -230,9 +232,9 @@ function PaymentPreview({
   amount: number
 }) {
   const t = useTranslations("Payments.preview")
-  const format = useFormatter()
+  const format = useFormat()
   const money = (centavos: number) =>
-    format.number(centavos / 100, { style: "currency", currency: "MXN" })
+    formatMoney(format, centavos)
 
   const owed = (kind: "regular" | "special") =>
     unit.charges

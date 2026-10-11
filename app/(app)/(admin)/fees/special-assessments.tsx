@@ -1,4 +1,4 @@
-import { getFormatter, getTranslations } from "next-intl/server"
+import { getTranslations } from "next-intl/server"
 
 import {
   Table,
@@ -8,6 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { formatMoney } from "@/lib/format"
+import { getFormat } from "@/lib/format-server"
 import { getFeeUnits, getSpecialAssessments } from "@/lib/data/fees"
 import { OWNERSHIP_SHARE_TOTAL } from "@/models/unit"
 import { FeesSection } from "./fees-section"
@@ -16,7 +18,7 @@ import { SpecialAssessmentDialog } from "./special-assessment-dialog"
 export async function SpecialAssessments() {
   const [t, format, assessments, units] = await Promise.all([
     getTranslations("Fees.special"),
-    getFormatter(),
+    getFormat(),
     getSpecialAssessments(),
     getFeeUnits(),
   ])
@@ -68,10 +70,7 @@ export async function SpecialAssessments() {
                   })}
                 </TableCell>
                 <TableCell className="text-right tabular-nums">
-                  {format.number(assessment.total / 100, {
-                    style: "currency",
-                    currency: "MXN",
-                  })}
+                  {formatMoney(format, assessment.total)}
                 </TableCell>
               </TableRow>
             ))

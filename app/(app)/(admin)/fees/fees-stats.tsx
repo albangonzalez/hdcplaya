@@ -1,4 +1,4 @@
-import { getFormatter, getTranslations } from "next-intl/server"
+import { getTranslations } from "next-intl/server"
 
 import {
   Card,
@@ -7,6 +7,8 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
+import { formatMoney } from "@/lib/format"
+import { getFormat } from "@/lib/format-server"
 import { getFeeStats } from "@/lib/data/fees"
 import { periodDate } from "@/lib/fees"
 
@@ -17,12 +19,12 @@ function StatsGrid({ children }: { children: React.ReactNode }) {
 export async function FeesStats() {
   const [t, format, stats] = await Promise.all([
     getTranslations("Fees.stats"),
-    getFormatter(),
+    getFormat(),
     getFeeStats(),
   ])
 
   const money = (centavos: number) =>
-    format.number(centavos / 100, { style: "currency", currency: "MXN" })
+    formatMoney(format, centavos)
 
   const cards = [
     {

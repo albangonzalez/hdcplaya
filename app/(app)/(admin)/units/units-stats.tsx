@@ -1,4 +1,4 @@
-import { getFormatter, getTranslations } from "next-intl/server"
+import { getTranslations } from "next-intl/server"
 
 import {
   Card,
@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
+import { getFormat } from "@/lib/format-server"
 import { getUnitStats, type UnitStats } from "@/lib/data/units"
 import { OWNERSHIP_SHARE_TOTAL } from "@/models/unit"
 
@@ -19,7 +20,7 @@ function StatsGrid({ children }: { children: React.ReactNode }) {
 export async function UnitsStats() {
   const [t, format, values] = await Promise.all([
     getTranslations("Units.stats"),
-    getFormatter(),
+    getFormat(),
     getUnitStats(),
   ])
 

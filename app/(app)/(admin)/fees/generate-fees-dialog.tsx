@@ -2,9 +2,10 @@
 
 import { useState, useTransition } from "react"
 import { PlusIcon } from "lucide-react"
-import { useFormatter, useTranslations } from "next-intl"
+import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 
+import { useFormat } from "@/hooks/use-format"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -22,6 +23,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { formatMoney } from "@/lib/format"
 import type { FeeSettingRow, FeeUnit } from "@/lib/data/fees"
 import { findFeeSetting, periodDate } from "@/lib/fees"
 import { generateFees } from "./actions"
@@ -68,7 +70,7 @@ function GenerateFeesForm({
   ...props
 }: GenerateFeesDialogProps & { onDone: () => void }) {
   const t = useTranslations("Fees")
-  const format = useFormatter()
+  const format = useFormat()
   // The values the form opened with: the section refreshes after generating
   // while the dialog is still closing, and the form must not change then.
   const [{ settings, units, sharesAddUp, generatedPeriods, defaultPeriod }] =
@@ -132,10 +134,7 @@ function GenerateFeesForm({
           {setting && !problem && (
             <FieldDescription>
               {t("monthly.form.summary", {
-                budget: format.number(setting.monthlyBudget / 100, {
-                  style: "currency",
-                  currency: "MXN",
-                }),
+                budget: formatMoney(format, setting.monthlyBudget),
                 dueDate: format.dateTime(periodDate(period, setting.dueDay), {
                   dateStyle: "long",
                   timeZone: "UTC",

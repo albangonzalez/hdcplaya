@@ -1,4 +1,4 @@
-import { getFormatter, getTranslations } from "next-intl/server"
+import { getTranslations } from "next-intl/server"
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -9,6 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { formatMoney } from "@/lib/format"
+import { getFormat } from "@/lib/format-server"
 import { getFeeSettings, getNextFeePeriod } from "@/lib/data/fees"
 import { findFeeSetting, periodDate } from "@/lib/fees"
 import { FeeSettingDialog } from "./fee-setting-dialog"
@@ -17,7 +19,7 @@ import { FeesSection } from "./fees-section"
 export async function FeeSettings() {
   const [t, format, settings, nextPeriod] = await Promise.all([
     getTranslations("Fees.settings"),
-    getFormatter(),
+    getFormat(),
     getFeeSettings(),
     getNextFeePeriod(),
   ])
@@ -61,10 +63,7 @@ export async function FeeSettings() {
                   </div>
                 </TableCell>
                 <TableCell className="tabular-nums">
-                  {format.number(setting.monthlyBudget / 100, {
-                    style: "currency",
-                    currency: "MXN",
-                  })}
+                  {formatMoney(format, setting.monthlyBudget)}
                 </TableCell>
                 <TableCell className="tabular-nums">{setting.dueDay}</TableCell>
               </TableRow>

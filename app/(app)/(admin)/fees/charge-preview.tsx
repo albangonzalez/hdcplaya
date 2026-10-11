@@ -1,7 +1,9 @@
 "use client"
 
-import { useFormatter, useTranslations } from "next-intl"
+import { useTranslations } from "next-intl"
 
+import { useFormat } from "@/hooks/use-format"
+import { formatMoney } from "@/lib/format"
 import type { FeeUnit } from "@/lib/data/fees"
 import { splitByShares } from "@/lib/fees"
 
@@ -14,13 +16,13 @@ export function ChargePreview({
   total: number
 }) {
   const t = useTranslations("Fees.preview")
-  const format = useFormatter()
+  const format = useFormat()
   const amounts = splitByShares(
     total,
     units.map((unit) => unit.ownershipShare)
   )
   const money = (centavos: number) =>
-    format.number(centavos / 100, { style: "currency", currency: "MXN" })
+    formatMoney(format, centavos)
 
   return (
     <div className="overflow-hidden rounded-md border text-sm">

@@ -1,4 +1,4 @@
-import { getFormatter, getTranslations } from "next-intl/server"
+import { getTranslations } from "next-intl/server"
 
 import {
   Table,
@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { getFormat } from "@/lib/format-server"
 import { getOwnerOptions, getUnits } from "@/lib/data/units"
 import { OWNERSHIP_SHARE_TOTAL } from "@/models/unit"
 import { UnitRowActions } from "./unit-row-actions"
@@ -15,7 +16,7 @@ import { UnitRowActions } from "./unit-row-actions"
 export async function UnitsTable() {
   const [t, format, units, ownerOptions] = await Promise.all([
     getTranslations("Units"),
-    getFormatter(),
+    getFormat(),
     getUnits(),
     getOwnerOptions(),
   ])

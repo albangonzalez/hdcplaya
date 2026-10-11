@@ -1,4 +1,4 @@
-import { getFormatter, getTranslations } from "next-intl/server"
+import { getTranslations } from "next-intl/server"
 
 import {
   Table,
@@ -14,6 +14,8 @@ import {
   getMonthlyFees,
   getNextFeePeriod,
 } from "@/lib/data/fees"
+import { formatMoney } from "@/lib/format"
+import { getFormat } from "@/lib/format-server"
 import { periodDate } from "@/lib/fees"
 import { OWNERSHIP_SHARE_TOTAL } from "@/models/unit"
 import { FeesSection } from "./fees-section"
@@ -22,7 +24,7 @@ import { GenerateFeesDialog } from "./generate-fees-dialog"
 export async function MonthlyFees() {
   const [t, format, months, settings, units, nextPeriod] = await Promise.all([
     getTranslations("Fees.monthly"),
-    getFormatter(),
+    getFormat(),
     getMonthlyFees(),
     getFeeSettings(),
     getFeeUnits(),
@@ -81,10 +83,7 @@ export async function MonthlyFees() {
                   {format.number(month.units)}
                 </TableCell>
                 <TableCell className="text-right tabular-nums">
-                  {format.number(month.total / 100, {
-                    style: "currency",
-                    currency: "MXN",
-                  })}
+                  {formatMoney(format, month.total)}
                 </TableCell>
               </TableRow>
             ))

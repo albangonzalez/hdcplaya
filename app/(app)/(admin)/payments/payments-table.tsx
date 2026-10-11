@@ -1,4 +1,4 @@
-import { getFormatter, getTranslations } from "next-intl/server"
+import { getTranslations } from "next-intl/server"
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -9,13 +9,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { formatMoney } from "@/lib/format"
+import { getFormat } from "@/lib/format-server"
 import { getPayments } from "@/lib/data/payments"
 import { PaymentRowActions } from "./payment-row-actions"
 
 export async function PaymentsTable() {
   const [t, format, payments] = await Promise.all([
     getTranslations("Payments"),
-    getFormatter(),
+    getFormat(),
     getPayments(),
   ])
 
@@ -43,10 +45,7 @@ export async function PaymentsTable() {
             </TableRow>
           ) : (
             payments.map((payment) => {
-              const amount = format.number(payment.amount / 100, {
-                style: "currency",
-                currency: "MXN",
-              })
+              const amount = formatMoney(format, payment.amount)
               const date = format.dateTime(new Date(payment.date), {
                 dateStyle: "medium",
                 timeZone: "UTC",
