@@ -629,5 +629,31 @@
       "special": "Extraordinarias",
       "total": "Total vencido"
     }
+  },
+  "History": {
+    "empty": "Aún no hay cambios registrados.",
+    "columns": {
+      "at": "Fecha",
+      "actor": "Quién",
+      "action": "Qué",
+      "changes": "Campos modificados"
+    },
+    "actions": {
+      "create": "Creación",
+      "update": "Edición",
+      "cancel": "Cancelación"
+    },
+    "collections": {
+      "users": "Usuario",
+      "units": "Unidad",
+      "feeSettings": "Cuota de mantenimiento",
+      "specialAssessments": "Cuota extraordinaria",
+      "charges": "Cargo",
+      "payments": "Pago",
+      "accounts": "Cuenta",
+      "categories": "Categoría",
+      "transactions": "Transacción",
+      "files": "Archivo"
+    }
   }
 }

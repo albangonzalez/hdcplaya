@@ -629,5 +629,31 @@
       "special": "Special",
       "total": "Total overdue"
     }
+  },
+  "History": {
+    "empty": "No changes recorded yet.",
+    "columns": {
+      "at": "Date",
+      "actor": "Who",
+      "action": "What",
+      "changes": "Fields changed"
+    },
+    "actions": {
+      "create": "Created",
+      "update": "Edited",
+      "cancel": "Cancelled"
+    },
+    "collections": {
+      "users": "User",
+      "units": "Unit",
+      "feeSettings": "Maintenance fee",
+      "specialAssessments": "Special assessment",
+      "charges": "Charge",
+      "payments": "Payment",
+      "accounts": "Account",
+      "categories": "Category",
+      "transactions": "Transaction",
+      "files": "File"
+    }
   }
 }
