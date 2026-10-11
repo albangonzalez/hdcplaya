@@ -1,23 +1,19 @@
-import { redirect } from "next/navigation"
+import { Suspense } from "react"
 
+import { RedirectIfSignedOut } from "@/components/auth/SessionRedirect"
 import { LocaleSwitcher } from "@/components/locale-switcher"
 import { SetPasswordForm } from "@/components/set-password-form"
-import { createClient } from "@/lib/supabase/server"
 import { GalleryVerticalEndIcon } from "lucide-react"
 import Image from "next/image"
 
 // Reached from an invitation or a password-reset e-mail, once the link has
 // opened a session.
-export default async function SetPasswordPage() {
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getClaims()
-
-  if (!data?.claims) {
-    redirect("/login")
-  }
-
+export default function SetPasswordPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
+      <Suspense>
+        <RedirectIfSignedOut />
+      </Suspense>
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex items-center justify-between gap-2">
           <a href="#" className="flex items-center gap-2 font-medium">

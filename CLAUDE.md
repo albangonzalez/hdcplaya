@@ -15,6 +15,7 @@ pnpm lint                             # ESLint (flat config, eslint-config-next 
 pnpm lint path/to/file.tsx            # lint a single file
 pnpm exec tsc --noEmit                # type-check only
 pnpm dlx shadcn@latest add <name>     # add a shadcn/ui component into components/ui/
+pnpm seed:units                       # add the condo's units (scripts/seed-units.ts, run with tsx); skips existing ones
 ```
 
 There is no test runner configured.
@@ -30,6 +31,7 @@ Next.js 16.4 (App Router) · React 19.3 · TypeScript strict · Tailwind CSS v4 
 The Next.js version is newer than most training data — per `AGENTS.md`, read the relevant guide under `node_modules/next/dist/docs/` before writing Next-specific code. Things already in use here that differ from older Next:
 
 - `next.config.ts` enables `cacheComponents` and `partialPrefetching`. With Cache Components on, uncached/request-time data access in a Server Component has to sit behind `<Suspense>` or be explicitly cached — check the docs before adding data fetching.
+- Session checks wait for the request: `lib/supabase/server.ts` calls `await io()` before creating the client, because Supabase compares the session's expiry with the current time and Next otherwise reports `Date.now()` during prerendering. Anything that awaits it (directly or through `getCurrentUser()`) must therefore sit inside a `<Suspense>` placed in or below the layout shared with the previous page, or Next reports a blocking navigation. That is why `app/(app)/layout.tsx` and `app/(app)/(admin)/layout.tsx` are plain layouts wrapping an inner async component in `<Suspense>`, and why the login, forgot-password and set-password pages render `RedirectIfSignedIn` / `RedirectIfSignedOut` (`components/auth/SessionRedirect.tsx`) inside `<Suspense>` instead of awaiting the session themselves.
 - Layout/page props use the globally generated `LayoutProps<"/route">` / `PageProps<"/route">` helpers (see `app/layout.tsx`) rather than hand-written prop types.
 - Tailwind is wired through a Turbopack loader rule (`@tailwindcss/turbopack` in `next.config.ts`), not PostCSS. There is no `postcss.config.*` and no `tailwind.config.*`; all theme configuration lives in `app/globals.css`.
 
@@ -42,6 +44,7 @@ The product is an app for **Hacienda del Carmen Playa** (the name shown on the l
 - `app/(app)/page.tsx` (`/`) — the dashboard: `SectionCards` and `ChartAreaInteractive`, still the shadcn `dashboard-01` placeholder content. `components/data-table.tsx` (the block's table) is no longer rendered anywhere.
 - `app/(app)/(admin)/layout.tsx` — admin-only pages; redirects non-admins to `/`. Route groups don't appear in URLs, so `app/(app)/(admin)/users/page.tsx` is `/users`.
 - `app/(app)/(admin)/users/` — the users list, and the pattern for data pages: `page.tsx` renders the frame and wraps an async Server Component (`users-table.tsx`) in `<Suspense>` with a skeleton fallback; the query lives in `lib/data/` (`getUsers()`), re-checks the role itself, and returns plain objects (no `ObjectId`/`Date`) so rows can reach Client Components. Statistics cards (`users-stats.tsx`, `getUserStats()`) stream in their own `<Suspense>` above the table. `user-form-dialog.tsx` is the create/edit modal (no `user` prop = create), opened by `add-user-button.tsx` and by the Edit row action; creating calls the `createUser` Server Action in `actions.ts` (admin check, `userInputSchema`, Supabase `inviteUserByEmail` through `lib/supabase/admin.ts` with `SUPABASE_SECRET_KEY`, then the MongoDB insert with status `invited`, undoing the Supabase user if the insert fails, then `refresh()`); editing does not save yet. The other row actions (`user-row-actions.tsx`) are listed but not wired.
+- `app/(app)/(admin)/units/` (`/units`) — the units list, built like the users page: statistics (`units-stats.tsx`, `getUnitStats()`; the ownership-share card warns when shares do not add up to 10,000), then the table (`units-table.tsx`, `getUnits()` and `getOwnerOptions()` in `lib/data/units.ts`). The only row action is Edit (`unit-form-dialog.tsx`): identifier, ownership share as a number of shares out of 10,000 (`OWNERSHIP_SHARE_TOTAL`), and the current owners picked from users with the owner role (multi-select). The `updateUnit` Server Action in `actions.ts` validates with `unitInputSchema` and keeps ownership history: an owner who is removed gets `to` set to now, a new one is appended with `from` now. There is no way to create a unit yet, and unit edits are not written to the audit log.
 
 Component layers:
 

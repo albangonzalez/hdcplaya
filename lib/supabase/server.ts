@@ -1,7 +1,11 @@
 import { createServerClient } from '@supabase/ssr'
+import { io } from 'next/cache'
 import { cookies } from 'next/headers'
 
 export async function createClient() {
+  // Supabase compares the session's expiry with the current time, which must
+  // not happen while prerendering: cookies() alone still resolves in the shell.
+  await io()
   const cookieStore = await cookies()
 
   return createServerClient(

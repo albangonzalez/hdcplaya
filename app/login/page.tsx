@@ -1,21 +1,17 @@
-import { redirect } from "next/navigation"
+import { Suspense } from "react"
 
+import { RedirectIfSignedIn } from "@/components/auth/SessionRedirect"
 import { LocaleSwitcher } from "@/components/locale-switcher"
 import { LoginForm } from "@/components/login-form"
-import { createClient } from "@/lib/supabase/server"
 import { GalleryVerticalEndIcon } from "lucide-react"
 import Image from "next/image"
 
-export default async function LoginPage() {
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getClaims()
-
-  if (data?.claims) {
-    redirect("/")
-  }
-
+export default function LoginPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
+      <Suspense>
+        <RedirectIfSignedIn />
+      </Suspense>
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex items-center justify-between gap-2">
           <a href="#" className="flex items-center gap-2 font-medium">
