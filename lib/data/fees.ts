@@ -131,6 +131,9 @@ export async function getNextFeePeriod(): Promise<string> {
 }
 
 export async function getFeeStats(): Promise<FeeStats> {
+  // First, before any query starts: it also waits for the request.
+  await requireAdmin()
+
   const [settings, months, pending] = await Promise.all([
     getFeeSettings(),
     getMonthlyFees(),
