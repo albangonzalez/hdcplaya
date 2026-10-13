@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "db:indexes": "tsx --env-file=.env scripts/ensure-indexes.ts",
+    "db:migrate-payments": "tsx --env-file=.env scripts/migrate-payment-units.ts",
     "seed:units": "tsx --env-file=.env scripts/seed-units.ts"
   },
   "dependencies": {

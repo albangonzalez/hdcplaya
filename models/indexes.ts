@@ -32,7 +32,7 @@ export async function ensureIndexes() {
     ),
     chargesCollection().createIndex({ status: 1, dueDate: 1 }),
 
-    paymentsCollection().createIndex({ unitId: 1, date: -1 }),
+    paymentsCollection().createIndex({ "units.unitId": 1, date: -1 }),
 
     accountsCollection().createIndex({ name: 1 }, { unique: true }),
 

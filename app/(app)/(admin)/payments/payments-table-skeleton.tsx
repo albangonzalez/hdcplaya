@@ -12,6 +12,7 @@ export function PaymentsTableSkeleton() {
           <Skeleton className="h-4 w-24" />
           <Skeleton className="h-4 w-16" />
           <Skeleton className="h-4 w-1/4" />
+          <Skeleton className="h-4 w-20" />
           <Skeleton className="ml-auto h-4 w-24" />
           <Skeleton className="size-8" />
         </div>

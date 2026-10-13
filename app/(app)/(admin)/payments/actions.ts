@@ -11,7 +11,7 @@ import { applyUnitCredit } from "@/lib/payment-allocation"
 import { chargeStatus, isMonthLocked } from "@/lib/payments"
 import { accountsCollection } from "@/models/account"
 import { categoriesCollection, categorySchema } from "@/models/category"
-import { chargeSchema, chargesCollection } from "@/models/charge"
+import { chargeSchema, chargesCollection, type Charge } from "@/models/charge"
 import {
   cancelPaymentInputSchema,
   paymentInputSchema,
@@ -34,6 +34,8 @@ export type RecordPaymentResult =
         | "monthLocked"
         | "unitNotFound"
         | "accountNotFound"
+        | "chargesChanged"
+        | "creditWithUnpaid"
         | "saveFailed"
     }
 
@@ -63,9 +65,18 @@ async function getFeesCategoryId(session?: ClientSession): Promise<ObjectId> {
   return found!._id
 }
 
-// Records a payment a unit made outside the app. It is applied to the unit's
-// oldest unpaid charges, anything left over stays as credit, and the matching
-// income transaction is created with it.
+// Thrown inside the transaction when what the admin assigned no longer fits
+// the charges, so nothing is saved.
+class PaymentRefused extends Error {
+  constructor(readonly reason: "chargesChanged" | "creditWithUnpaid") {
+    super(reason)
+  }
+}
+
+// Records a payment made outside the app, for one unit or several. It pays the
+// charges the admin assigned it to, what is assigned to no charge stays as
+// credit on the unit, and one income transaction is created for the whole
+// amount.
 export async function recordPayment(
   input: unknown
 ): Promise<RecordPaymentResult> {
@@ -84,18 +95,31 @@ export async function recordPayment(
     return { ok: false, error: "monthLocked" }
   }
 
-  const unitId = new ObjectId(parsed.data.unitId)
+  const parts = parsed.data.units.map((unit) => ({
+    unitId: new ObjectId(unit.unitId),
+    allocations: unit.allocations.map((allocation) => ({
+      chargeId: new ObjectId(allocation.chargeId),
+      amount: allocation.amount,
+    })),
+    credit: unit.credit,
+  }))
+  const unitIds = parts.map((part) => part.unitId)
   const accountId = new ObjectId(parsed.data.accountId)
-  const [unit, account] = await Promise.all([
-    unitsCollection().findOne({ _id: unitId }),
+  const [units, account] = await Promise.all([
+    unitsCollection()
+      .find({ _id: { $in: unitIds } })
+      .toArray(),
     accountsCollection().findOne({ _id: accountId, active: true }),
   ])
-  if (!unit) {
+  if (units.length !== unitIds.length) {
     return { ok: false, error: "unitNotFound" }
   }
   if (!account) {
     return { ok: false, error: "accountNotFound" }
   }
+  const identifiers = unitIds.map(
+    (unitId) => units.find((unit) => unit._id.equals(unitId))!.identifier
+  )
 
   try {
     await withTransaction(async (session) => {
@@ -104,12 +128,76 @@ export async function recordPayment(
       const paymentId = new ObjectId()
       const transactionId = new ObjectId()
 
+      const charges = chargesCollection()
+      const unpaid = await charges
+        .find(
+          { unitId: { $in: unitIds }, status: { $in: ["open", "partial"] } },
+          { session }
+        )
+        .toArray()
+      // Everything is checked before the first write: without a replica set
+      // nothing is rolled back.
+      const paid: Charge[] = []
+      for (const part of parts) {
+        const owed = unpaid.filter((charge) => charge.unitId.equals(part.unitId))
+        // A charge that is not this unit's, or that is no longer unpaid.
+        if (
+          part.allocations.some(
+            (allocation) =>
+              !owed.some((charge) => charge._id.equals(allocation.chargeId))
+          )
+        ) {
+          throw new PaymentRefused("chargesChanged")
+        }
+
+        let leftUnpaid = false
+        for (const charge of owed) {
+          const remaining = charge.amount - charge.paidAmount
+          const applied =
+            part.allocations.find((allocation) =>
+              allocation.chargeId.equals(charge._id)
+            )?.amount ?? 0
+          if (applied > remaining) {
+            throw new PaymentRefused("chargesChanged")
+          }
+          if (applied < remaining) {
+            leftUnpaid = true
+          }
+          if (applied === 0) continue
+
+          const paidAmount = charge.paidAmount + applied
+          paid.push(
+            chargeSchema.parse({
+              ...charge,
+              paidAmount,
+              status: chargeStatus(charge.amount, paidAmount),
+            })
+          )
+        }
+        // Credit is only kept by a unit that owes nothing: otherwise it would
+        // go to its oldest charge at once, not where the admin put it.
+        if (part.credit > 0 && leftUnpaid) {
+          throw new PaymentRefused("creditWithUnpaid")
+        }
+      }
+      for (const charge of paid) {
+        await charges.updateOne(
+          { _id: charge._id },
+          { $set: { paidAmount: charge.paidAmount, status: charge.status } },
+          { session }
+        )
+      }
+
       const transaction = transactionSchema.parse({
         _id: transactionId,
         type: "income",
         date,
         amount: parsed.data.amount,
-        description: `Pago de cuotas · ${unit.identifier}`,
+        description: [
+          "Pago de cuotas",
+          identifiers.join(", "),
+          ...(parsed.data.reference ? [`folio ${parsed.data.reference}`] : []),
+        ].join(" · "),
         accountId,
         toAccountId: null,
         categoryId: await getFeesCategoryId(session),
@@ -121,16 +209,21 @@ export async function recordPayment(
         updatedAt: now,
       })
       await transactionsCollection().insertOne(transaction, { session })
-      // Saved unapplied; applying the unit's credit is what pays its charges.
       const payment = paymentSchema.parse({
         _id: paymentId,
-        unitId,
         date,
         amount: parsed.data.amount,
         method: parsed.data.method,
         accountId,
-        allocations: [],
-        unallocatedAmount: parsed.data.amount,
+        reference: parsed.data.reference,
+        units: parts.map((part) => ({
+          unitId: part.unitId,
+          amount:
+            part.credit +
+            part.allocations.reduce((sum, { amount }) => sum + amount, 0),
+          allocations: part.allocations,
+          unallocatedAmount: part.credit,
+        })),
         transactionId,
         status: "active",
         cancelReason: null,
@@ -157,11 +250,13 @@ export async function recordPayment(
         ],
         session
       )
-      await applyUnitCredit(unitId, session)
     })
   } catch (saveError) {
-    console.error("Recording the payment failed", saveError)
     refresh()
+    if (saveError instanceof PaymentRefused) {
+      return { ok: false, error: saveError.reason }
+    }
+    console.error("Recording the payment failed", saveError)
     return { ok: false, error: "saveFailed" }
   }
 
@@ -259,7 +354,8 @@ export async function cancelPayment(
       )
 
       const charges = chargesCollection()
-      for (const allocation of payment.allocations) {
+      const allocations = payment.units.flatMap((unit) => unit.allocations)
+      for (const allocation of allocations) {
         const charge = await charges.findOne(
           { _id: allocation.chargeId },
           { session }
@@ -279,8 +375,10 @@ export async function cancelPayment(
         )
       }
 
-      // Credit from the unit's other payments now goes to the reopened charges.
-      await applyUnitCredit(payment.unitId, session)
+      // Credit from the units' other payments now goes to the reopened charges.
+      for (const unit of payment.units) {
+        await applyUnitCredit(unit.unitId, session)
+      }
     })
   } catch (saveError) {
     console.error("Cancelling the payment failed", saveError)

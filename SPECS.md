@@ -95,11 +95,11 @@ The first version covers the six features below, plus the accounts and roles of 
 
 ### 6.4 Payments and outstanding fees (admin records, owner views)
 
-- Owners pay outside the app, by wire transfer or cash deposit. The admin records each payment: unit, amount, date, method, and optionally the proof of payment.
+- Owners pay outside the app, by wire transfer or cash deposit. The admin records each payment: amount, date, method, its reference on the bank statement (folio, optional), the unit or units it is for, and optionally the proof of payment.
 - The admin also chooses the account that received the payment.
-- A recorded payment is applied to the unit's oldest unpaid charge first. Partial payments are allowed and leave a remaining balance.
-- If a payment is larger than what the unit owes, the excess is kept as credit on the unit and applied automatically to its next charge.
-- Each recorded payment creates the matching income transaction.
+- One payment can cover several units and several months: an owner with several units often sends a single deposit. The admin assigns each part of the amount to a unit's charge (a month's fee or a special assessment). The form proposes the oldest unpaid charges first, and the admin can change any line. Partial payments are allowed and leave a remaining balance.
+- The whole amount must be assigned. What is not assigned to a charge is kept as credit on a unit, which is only possible when that unit owes nothing else, and is applied automatically to the unit's next charge, oldest first.
+- Each recorded payment creates one matching income transaction for its whole amount.
 - An owner sees, for each of their units: fees and charges issued, payments recorded, what is currently due, and what is overdue.
 - Outstanding amounts are always shown split in two: regular fees and special assessments.
 - **Transparency rule.** Every owner can also see the current balance and overdue amount of every other unit.
@@ -238,11 +238,15 @@ Eleven MongoDB collections cover the minimal version. Collection and field names
 
 // payments
 {
-  _id, unitId, date, amount,
+  _id, date, amount,
   method: "wire" | "cash",
   accountId,
-  allocations: [{ chargeId, amount }],    // oldest charge first
-  unallocatedAmount,                      // credit, applied to the next charge
+  reference: string | null,               // on the bank statement (folio)
+  units: [{                               // each unit once
+    unitId, amount,                       // the unit's part of the payment
+    allocations: [{ chargeId, amount }],
+    unallocatedAmount                     // credit, applied to the next charge
+  }],
   transactionId,                          // the income transaction it created
   status: "active" | "cancelled", cancelReason,
   recordedBy, createdAt

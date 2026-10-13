@@ -161,6 +161,7 @@ async function UnitDetail({
               <TableRow>
                 <TableHead>{t("payments.date")}</TableHead>
                 <TableHead>{t("payments.method")}</TableHead>
+                <TableHead>{t("payments.reference")}</TableHead>
                 <TableHead className="text-right">
                   {t("payments.amount")}
                 </TableHead>
@@ -169,7 +170,7 @@ async function UnitDetail({
             <TableBody>
               {detail.payments.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={3} className="h-24 text-center">
+                  <TableCell colSpan={4} className="h-24 text-center">
                     {t("payments.empty")}
                   </TableCell>
                 </TableRow>
@@ -189,6 +190,7 @@ async function UnitDetail({
                     <TableCell>
                       {t(`payments.methods.${payment.method}`)}
                     </TableCell>
+                    <TableCell>{payment.reference}</TableCell>
                     <TableCell
                       className={
                         payment.status === "cancelled"
@@ -197,6 +199,13 @@ async function UnitDetail({
                       }
                     >
                       {formatMoney(format, payment.amount)}
+                      {payment.total !== payment.amount && (
+                        <div className="text-xs text-muted-foreground">
+                          {t("payments.partOf", {
+                            total: formatMoney(format, payment.total),
+                          })}
+                        </div>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))

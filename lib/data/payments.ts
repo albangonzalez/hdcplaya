@@ -1,21 +1,26 @@
 import { condoToday } from "@/lib/condo-time"
 import { requireAdmin } from "@/lib/auth"
+import { getFullName } from "@/lib/current-user"
 import { isMonthLocked } from "@/lib/payments"
 import { accountsCollection } from "@/models/account"
 import { chargesCollection } from "@/models/charge"
 import { paymentsCollection, type Payment } from "@/models/payment"
 import { specialAssessmentsCollection } from "@/models/special-assessment"
 import { unitsCollection } from "@/models/unit"
+import { usersCollection } from "@/models/user"
 
 // Plain values only, so they can be passed to Client Components. Amounts are
 // centavos and dates are ISO strings.
 export type PaymentRow = {
   id: string
   date: string
-  unit: string
+  // Identifiers of the units it paid for.
+  units: string[]
   amount: number
   method: Payment["method"]
   account: string
+  // Its reference on the bank statement.
+  reference: string | null
   status: Payment["status"]
   cancelReason: string | null
   // Still within the days in which its month can be corrected.
@@ -28,18 +33,28 @@ export type PaymentCharge = {
   // "YYYY-MM" for a regular fee, the assessment's description for a special one.
   period: string | null
   description: string | null
+  dueDate: string
   remaining: number
 }
 
 export type PaymentUnit = {
   id: string
   identifier: string
-  // Unpaid charges, oldest first: the order a payment is applied in.
+  ownershipShare: number
+  // Unpaid charges, oldest first: the order a payment is spread in.
   charges: PaymentCharge[]
+}
+
+// A current owner and their units, to pick them all at once.
+export type PaymentOwner = {
+  id: string
+  fullName: string
+  unitIds: string[]
 }
 
 export type PaymentFormData = {
   units: PaymentUnit[]
+  owners: PaymentOwner[]
   accounts: { id: string; name: string }[]
   // Today's date where the condo is, "YYYY-MM-DD".
   today: string
@@ -74,10 +89,13 @@ export async function getPayments(): Promise<PaymentRow[]> {
     return {
       id: payment._id.toHexString(),
       date,
-      unit: unitNames.get(payment.unitId.toHexString()) ?? "",
+      units: payment.units
+        .map((unit) => unitNames.get(unit.unitId.toHexString()) ?? "")
+        .sort((a, b) => a.localeCompare(b, "es", { numeric: true })),
       amount: payment.amount,
       method: payment.method,
       account: accountNames.get(payment.accountId.toHexString()) ?? "",
+      reference: payment.reference,
       status: payment.status,
       cancelReason: payment.cancelReason,
       canCancel:
@@ -109,11 +127,26 @@ export async function getPaymentFormData(): Promise<PaymentFormData> {
       assessment.description,
     ])
   )
+  const ownedUnits = new Map<string, string[]>()
+  for (const unit of units) {
+    for (const owner of unit.owners) {
+      if (owner.to !== null) continue
+      const ownerId = owner.userId.toHexString()
+      ownedUnits.set(ownerId, [
+        ...(ownedUnits.get(ownerId) ?? []),
+        unit._id.toHexString(),
+      ])
+    }
+  }
+  const owners = await usersCollection()
+    .find({ _id: { $in: units.flatMap((unit) => unit.owners.map((o) => o.userId)) } })
+    .toArray()
 
   return {
     units: units.map((unit) => ({
       id: unit._id.toHexString(),
       identifier: unit.identifier,
+      ownershipShare: unit.ownershipShare,
       charges: charges
         .filter((charge) => charge.unitId.equals(unit._id))
         .map((charge) => ({
@@ -125,9 +158,18 @@ export async function getPaymentFormData(): Promise<PaymentFormData> {
               ? (descriptions.get(charge.specialAssessmentId.toHexString()) ??
                 "")
               : null,
+          dueDate: charge.dueDate.toISOString(),
           remaining: charge.amount - charge.paidAmount,
         })),
     })),
+    owners: owners
+      .map((owner) => ({
+        id: owner._id.toHexString(),
+        fullName: getFullName(owner),
+        unitIds: ownedUnits.get(owner._id.toHexString()) ?? [],
+      }))
+      .filter((owner) => owner.unitIds.length > 0)
+      .sort((a, b) => a.fullName.localeCompare(b.fullName, "es")),
     accounts: accounts.map((account) => ({
       id: account._id.toHexString(),
       name: account.name,

@@ -44,8 +44,13 @@ export type UnitCharge = {
 export type UnitPayment = {
   id: string
   date: string
+  // The unit's part of the payment, and the whole payment when it also paid
+  // for other units.
   amount: number
+  total: number
   method: Payment["method"]
+  // Its reference on the bank statement.
+  reference: string | null
   status: Payment["status"]
 }
 
@@ -135,8 +140,15 @@ async function toBalances(units: Unit[]): Promise<UnitBalance[]> {
       .toArray(),
     paymentsCollection()
       .aggregate<{ _id: ObjectId; credit: number }>([
-        { $match: { unitId: { $in: unitIds }, status: "active" } },
-        { $group: { _id: "$unitId", credit: { $sum: "$unallocatedAmount" } } },
+        { $match: { "units.unitId": { $in: unitIds }, status: "active" } },
+        { $unwind: "$units" },
+        { $match: { "units.unitId": { $in: unitIds } } },
+        {
+          $group: {
+            _id: "$units.unitId",
+            credit: { $sum: "$units.unallocatedAmount" },
+          },
+        },
       ])
       .toArray(),
     usersCollection().find({ _id: { $in: ownerIds } }).toArray(),
@@ -208,7 +220,7 @@ export async function getUnitDetail(
       .sort({ dueDate: -1, _id: -1 })
       .toArray(),
     paymentsCollection()
-      .find({ unitId: unit._id })
+      .find({ "units.unitId": unit._id })
       .sort({ date: -1, createdAt: -1 })
       .toArray(),
     specialAssessmentsCollection().find().toArray(),
@@ -237,8 +249,11 @@ export async function getUnitDetail(
     payments: payments.map((payment) => ({
       id: payment._id.toHexString(),
       date: payment.date.toISOString(),
-      amount: payment.amount,
+      amount:
+        payment.units.find((part) => part.unitId.equals(unit._id))?.amount ?? 0,
+      total: payment.amount,
       method: payment.method,
+      reference: payment.reference,
       status: payment.status,
     })),
     tenants: unit.tenants

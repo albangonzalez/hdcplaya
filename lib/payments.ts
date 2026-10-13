@@ -1,7 +1,7 @@
 // Payment rules shared by the server and the dialog that previews them.
 // Nothing here may import the database: Client Components use it too.
 
-import { nextPeriod } from "@/lib/fees"
+import { nextPeriod, splitByShares } from "@/lib/fees"
 
 export type ChargeStatus = "open" | "partial" | "paid"
 
@@ -30,6 +30,39 @@ export function allocateOldestFirst<T extends { remaining: number }>(
   }
 
   return { allocations, unallocated }
+}
+
+// How a payment for several units is spread before the admin adjusts it: the
+// oldest charge first across all of them, and what is left over as credit,
+// split between the units by ownership share. Amounts are keyed by charge id
+// and by unit id.
+export function distributePayment(
+  units: {
+    id: string
+    ownershipShare: number
+    // Oldest first.
+    charges: { id: string; remaining: number; dueDate: string }[]
+  }[],
+  amount: number
+): { allocations: Record<string, number>; credits: Record<string, number> } {
+  const charges = units
+    .flatMap((unit) => unit.charges)
+    // Stable, so units keep their order within a due date.
+    .sort((a, b) => a.dueDate.localeCompare(b.dueDate))
+  const { allocations, unallocated } = allocateOldestFirst(charges, amount)
+  const credits = splitByShares(
+    unallocated,
+    units.map((unit) => unit.ownershipShare)
+  )
+
+  return {
+    allocations: Object.fromEntries(
+      allocations.map((allocation) => [allocation.charge.id, allocation.amount])
+    ),
+    credits: Object.fromEntries(
+      units.map((unit, index) => [unit.id, credits[index]])
+    ),
+  }
 }
 
 // A month's payments can be recorded or cancelled until 7 days after it ends.

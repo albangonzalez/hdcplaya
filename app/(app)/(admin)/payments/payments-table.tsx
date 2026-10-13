@@ -29,6 +29,7 @@ export async function PaymentsTable() {
             <TableHead>{t("columns.date")}</TableHead>
             <TableHead>{t("columns.unit")}</TableHead>
             <TableHead>{t("columns.method")}</TableHead>
+            <TableHead>{t("columns.reference")}</TableHead>
             <TableHead>{t("columns.account")}</TableHead>
             <TableHead className="text-right">{t("columns.amount")}</TableHead>
             <TableHead className="w-12">
@@ -39,13 +40,14 @@ export async function PaymentsTable() {
         <TableBody>
           {payments.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={6} className="h-24 text-center">
+              <TableCell colSpan={7} className="h-24 text-center">
                 {t("empty")}
               </TableCell>
             </TableRow>
           ) : (
             payments.map((payment) => {
               const amount = formatMoney(format, payment.amount)
+              const units = payment.units.join(", ")
               const date = format.dateTime(new Date(payment.date), {
                 dateStyle: "medium",
                 timeZone: "UTC",
@@ -55,7 +57,7 @@ export async function PaymentsTable() {
                   <TableCell>{date}</TableCell>
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-2">
-                      {payment.unit}
+                      {units}
                       {payment.status === "cancelled" && (
                         <Badge
                           variant="outline"
@@ -67,6 +69,7 @@ export async function PaymentsTable() {
                     </div>
                   </TableCell>
                   <TableCell>{t(`methods.${payment.method}`)}</TableCell>
+                  <TableCell>{payment.reference}</TableCell>
                   <TableCell>{payment.account}</TableCell>
                   <TableCell
                     className={
@@ -82,7 +85,8 @@ export async function PaymentsTable() {
                       payment={payment}
                       summary={t("cancel.summary", {
                         amount,
-                        unit: payment.unit,
+                        count: payment.units.length,
+                        units,
                         date,
                       })}
                     />
