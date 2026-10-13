@@ -195,6 +195,7 @@ Eleven MongoDB collections cover the minimal version. Collection and field names
   firstName,
   firstLastName,                  // required
   secondLastName,                 // optional
+  phone,                          // optional
   role: "owner" | "admin",
   isCommittee: boolean,
   language: "es" | "en",

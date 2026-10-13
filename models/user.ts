@@ -16,6 +16,8 @@ export const userSchema = z
     firstName: nameSchema,
     firstLastName: nameSchema,
     secondLastName: nameSchema.nullable(),
+    // Null when unknown; documents saved before the field existed read as null.
+    phone: z.string().trim().min(1).nullable().default(null),
     role: userRoleSchema,
     isCommittee: z.boolean(),
     language: languageSchema,
